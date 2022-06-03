@@ -1,4 +1,5 @@
 name: "eventglm Tutorial"
+output_dir: "docs"
 navbar:
   title: "Using the `eventglm` R package for regression modeling of censored time-to-event outcomes"
   left:
