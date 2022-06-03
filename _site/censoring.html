@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Censoring assumptions and models</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Using the `eventglm` R package for regression modeling of censored time-to-event outcomes</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lessons
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="basics.html">Lesson 1: Basics</a>
+    </li>
+    <li>
+      <a href="cmprisk.html">Lesson 2: Multiple causes and times</a>
+    </li>
+    <li>
+      <a href="censoring.html">Lesson 3: Censoring models</a>
+    </li>
+    <li>
+      <a href="multivar.html">Lesson 4: Multivariate outcome models</a>
+    </li>
+    <li>
+      <a href="extending.html">Lesson 5: Custom pseudo observation modules</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="biblio.html">References and resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Censoring assumptions and models</h1>
+
+</div>
+
+
+<div id="learning-objectives" class="section level3 alert alert-success">
+<h3 class="alert alert-success">Learning objectives</h3>
+<p>In this lesson you will</p>
+<ol style="list-style-type: decimal">
+<li>Understand how censoring plays a role in the <code>eventglm</code> models</li>
+<li>Explore the different options for censoring models</li>
+<li>Learn how to construct more flexible models for censoring</li>
+</ol>
+</div>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<p>Library the <code>survival</code> package and then the <code>eventglm</code> package. We will use some commands from <code>survival</code> to make sense of what is going on in the regression models.</p>
+<pre class="r"><code>library(survival)
+library(eventglm)</code></pre>
+</div>
+<div id="how-does-eventglm-estimate-the-models" class="section level2">
+<h2>How does <code>eventglm</code> estimate the models?</h2>
+<p>Our main interest is in estimating the parameters of a generalized linear regression model for <span class="math inline">\(V_i\)</span> conditional on covariates <span class="math inline">\(X_i\)</span>: <span class="math display">\[
+E(V_i | X_i) = g^{-1}\{X_i^{\top} \beta\},
+\]</span> where <span class="math inline">\(V_i = I(T_i &lt; t, \delta_i = d)\)</span> for some specified time <span class="math inline">\(t\)</span>, cause <span class="math inline">\(d\)</span>, and link function <span class="math inline">\(g\)</span>.</p>
+<p>We do not observe <span class="math inline">\(T_i\)</span> and <span class="math inline">\(\delta_i\)</span> directly, but rather <span class="math inline">\(Y_i = \min\{C_i, T_i\}\)</span> where <span class="math inline">\(C_i\)</span> is the censoring time, and <span class="math inline">\(\Delta_i \in \{0, 1, \ldots, d\}\)</span> where where 0 indicates censoring occurred before any of the events. The collection of observations will be denoted <span class="math inline">\(Z_1, \ldots, Z_n\)</span> where <span class="math inline">\(Z_i = (Y_i, \Delta_i, X_i)\)</span>, and are assumed to be independent and identically distributed.</p>
+<p>If there were no censoring before time <span class="math inline">\(t^*\)</span>, then the <span class="math inline">\(V_i\)</span> are all observed for <span class="math inline">\(i = 1, \ldots, n\)</span> and the parameters could be estimated using standard methods. When that is not the case, the model can be estimated using pseudo-observations <span class="citation">Andersen, Klein, and Rosthøj (2003)</span>. Let <span class="math inline">\(P_i\)</span> denote the pseudo-observation for subject <span class="math inline">\(i\)</span> which will remain abstract for the moment. When the pseudo-observations are computed in a way that <span class="math display">\[
+E(P_i | X_i) = E(V_i | X_i) + o_p(1) 
+\]</span> in large samples, then estimating <span class="math inline">\(\beta\)</span> by solving the estimating equations <span class="math display">\[
+\sum_{i = 1}^n \frac{\partial g^{-1}}{\partial \beta} A_i^{-1} \{P_i - g^{-1}(X_i^{\top} \beta)\} = \sum_{i = 1}^n U_i(\beta) =  0
+\]</span> yields consistent and asymptotically normal estimates <span class="math inline">\(\hat{\beta}\)</span>.</p>
+<p>Let <span class="math inline">\(\theta = E(V_i)\)</span> denote the cumulative summary statistic of interest but marginal with respect to the covariates (i.e., ignoring the covariates) and <span class="math inline">\(\hat{\theta}\)</span> an estimate of that quantity using all of the observations. The estimator is generally nonparametric, e.g., the Aalen-Johansen estimator <span class="citation">(Aalen and Johansen 1978)</span> of the cumulative incidence curve, or the Kaplan-Meier estimator <span class="citation">(Kaplan and Meier 1958)</span> of the survivor curve, though recently parametric estimators of the marginal quantities have been suggested <span class="citation">Sabathé et al. (2020)</span>.</p>
+<p>Let <span class="math inline">\(\hat{\theta}_{-i}\)</span> denote the jackknife estimate obtained by leaving the <span class="math inline">\(i\)</span>th observation out of the sample and recomputing the estimate. Then the <span class="math inline">\(i\)</span>th jackknife pseudo-observation is <span class="math display">\[
+P_i = n \hat{\theta} - (n - 1) \hat{\theta}_{-i}.
+\]</span> If censoring is completely independent, then the asymptotic conditional unbiasedness condition holds.</p>
+<p>If we instead assume for some subset of covariates <span class="math inline">\(\tilde{X}_i\)</span> that <span class="math inline">\((T_i, X_i, \Delta_i) \perp C_i | \tilde{X}_i\)</span> then we can use different approaches to computing the pseudo-observations that will satisfy the asymptotic conditional unbiasedness. When <span class="math inline">\(\tilde{X}_i\)</span> only contains categorical covariates with a finite set of combinations, <span class="citation">Andersen and Pohar Perme (2010)</span> suggested computing the jackknife <span class="math inline">\(P_i\)</span> separately for each combination of values in <span class="math inline">\(\tilde{X}_i\)</span>. This is implemented in our package and can be obtained using the <code>model.censoring = "stratified"</code> option.</p>
+<p>If <span class="math inline">\(\tilde{X}_i\)</span> contains continuous covariates, then we can model the censoring mechanism conditional on those covariates and use an inverse probability of censoring weighted marginal estimator. Modeling the censoring process conditional on covariates and using inverse probability of censoring weighted estimators was first explored in <span class="citation">Binder, Gerds, and Andersen (2014)</span>. This was further developed in <span class="citation">Overgaard, Parner, and Pedersen (2019)</span> who showed that asymptotic conditional unbiasedness holds for inverse probability of censoring weighted estimators of the cumulative quantity <span class="math inline">\(E(V_i)\)</span>.</p>
+</div>
+<div id="censoring-models" class="section level2">
+<h2>Censoring models</h2>
+<p>By default, we assume that time to censoring is independent of the time to the event, <strong>and of all covariates in the model</strong>. This is more restrictive than parametric survival models, or Cox regression, which only assumes that censoring time is conditionally independent of event time given the covariates in the model. We provide several options to relax that assumption using the <code>model.censoring</code> and <code>formula.censoring</code> options. The first is to compute stratified pseudo observations, which assumes that the censoring is independent given a set of categorical covariates:</p>
+<pre class="r"><code>colon.ci.adj &lt;- cumincglm(Surv(time, status) ~ rx + age + node4, time = 2500, data = colon)
+colon.ci.cen1 &lt;- cumincglm(Surv(time, status) ~ rx + age + node4, time = 2500, 
+                           data = colon, model.censoring = &quot;stratified&quot;, 
+                           formula.censoring = ~ rx)</code></pre>
+<p>Next, we can assume that the time to censoring follows a Cox model given a set of covariates. By default, the same covariate formula (right hand side) as the main model is used, but any formula can be specified. We can also use Aalens additive hazards model instead of a Cox model for the censoring distribution. Then inverse probability of censoring weighted pseudo observations are used <span class="citation">(Overgaard, Parner, and Pedersen 2019)</span>. According to a simulation study, the stratified option works quite well even when the censoring model is misspecified, and the Aalen additive model tends to work better than the Cox model.</p>
+<p>The <code>ipcw.method</code> argument determines the weighting method used, with the default being “binder” and the other option is “hajek.” The intercept estimate tends to be off when using “binder” so be aware of that if it is important to you.</p>
+<pre class="r"><code>colon.ci.cen2 &lt;- cumincglm(Surv(time, status) ~ rx + age + node4, time = 2500, 
+                           data = colon, model.censoring = &quot;coxph&quot;, 
+                           formula.censoring = ~ rx + age + node4)
+colon.ci.cen3 &lt;- cumincglm(Surv(time, status) ~ rx + age + node4, time = 2500, 
+                           data = colon, model.censoring = &quot;aareg&quot;, 
+                           formula.censoring = ~ rx + age + node4)
+
+colon.ci.cen2h &lt;- cumincglm(Surv(time, status) ~ rx + age + node4, time = 2500, 
+                           data = colon, model.censoring = &quot;coxph&quot;, 
+                           formula.censoring = ~ rx + age + node4, ipcw.method = &quot;hajek&quot;)
+colon.ci.cen3h &lt;- cumincglm(Surv(time, status) ~ rx + age + node4, time = 2500, 
+                           data = colon, model.censoring = &quot;aareg&quot;, 
+                           formula.censoring = ~ rx + age + node4, ipcw.method = &quot;hajek&quot;)
+
+round(cbind(&quot;indep&quot; = coef(colon.ci.adj),
+  &quot;strat&quot; = coef(colon.ci.cen1),
+  &quot;coxipcw&quot; = coef(colon.ci.cen2),
+  &quot;aalenipcw&quot; = coef(colon.ci.cen3),
+  &quot;coxipcw.hajek&quot; = coef(colon.ci.cen2h),
+  &quot;aalenipcw.hajek&quot; = coef(colon.ci.cen3h)), 3)</code></pre>
+<pre><code>##              indep  strat coxipcw aalenipcw coxipcw.hajek aalenipcw.hajek
+## (Intercept)  0.318  0.314   0.535     0.596         0.297           0.317
+## rxLev       -0.034 -0.035  -0.034    -0.036        -0.031          -0.036
+## rxLev+5FU   -0.127 -0.128  -0.127    -0.127        -0.110          -0.129
+## age          0.002  0.002   0.002     0.002         0.003           0.002
+## node4        0.332  0.334   0.335     0.334         0.330           0.335</code></pre>
+<p>In these models, the IPCW weights are returned in the element called “ipcw.weights.” If there are multiple time points, this will be a matrix with one column per time point.</p>
+<pre class="r"><code>colon.ci.cen2b &lt;- cumincglm(Surv(time, status) ~ rx + age + node4, 
+                            time = c(500, 1000, 2500), 
+                           data = colon, model.censoring = &quot;coxph&quot;, 
+                           formula.censoring = ~ rx + age + node4)
+head(colon.ci.cen2b$ipcw.weights)</code></pre>
+<pre><code>##           [,1]      [,2]      [,3]
+## [1,] 0.9988156 0.9988156 0.9936251
+## [2,] 0.9988733 0.9988733 0.3867807
+## [3,] 0.9983923 0.9983923 0.9983923
+## [4,] 1.0000000 1.0000000 1.0000000
+## [5,] 0.9984112 0.9984112 0.9984112
+## [6,] 0.9987135 0.9987135 0.9911426</code></pre>
+<pre class="r"><code>summary(colon.ci.cen2b$ipcw.weights)</code></pre>
+<pre><code>##        V1               V2               V3        
+##  Min.   :0.9983   Min.   :0.9983   Min.   :0.2702  
+##  1st Qu.:0.9987   1st Qu.:0.9987   1st Qu.:0.4832  
+##  Median :0.9988   Median :0.9988   Median :0.9094  
+##  Mean   :0.9989   Mean   :0.9989   Mean   :0.7680  
+##  3rd Qu.:0.9989   3rd Qu.:0.9989   3rd Qu.:0.9988  
+##  Max.   :1.0000   Max.   :1.0000   Max.   :1.0000</code></pre>
+</div>
+<div id="left-truncation-and-delayed-entry" class="section level2">
+<h2>Left truncation and delayed entry</h2>
+<p>A new feature in <code>eventglm</code> (available in version 1.3.0) is a module to fit models that allow for delayed entry/left truncation. This is done by specifying 2 times and an event in the call to <code>Surv</code> and using “infjack” for the <code>model.censoring</code> argument. Another assumption in this settings is that the entry time is independent of the time to event and all covariates in the model. Currently there are no options to relax that. Let’s look at an example using the <code>myeloid</code> dataset from the <code>survival</code> package. This is a more complex multi-state model, but for now we are only considering a model for the transition from complete response (CR) to death, conditional on having reached complete response. The time from entry to complete response determines the entry time.</p>
+<pre class="r"><code>connect &lt;- matrix(0, nrow = 5, ncol = 5, 
+                  dimnames = lapply(1:2, \(i) c(&quot;Entry&quot;, &quot;Death&quot;,
+                                                &quot;CR&quot;, &quot;Relapse&quot;, &quot;Transplant&quot;)))
+connect[1, 2:5] &lt;- 1
+connect[5, 2:5] &lt;- 1
+connect[3, 2:5] &lt;- 1
+connect[4, c(2, 4, 5)] &lt;- 1
+
+statefig(c(2, 3), connect)</code></pre>
+<p><img src="censoring_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>mdata &lt;- tmerge(myeloid[!is.na(myeloid$crtime),1:2], myeloid[!is.na(myeloid$crtime),],
+                  id=id, death= event(futime, death),
+                  cr = event(crtime))
+mdata &lt;- mdata[mdata$cr == 0,]
+head(mdata)</code></pre>
+<pre><code>##    id trt tstart tstop death cr
+## 2   1   B     44   235     1  0
+## 4   3   A     38  1983     0  0
+## 6   4   B     25  2137     0  0
+## 8   5   B     56   326     1  0
+## 10  8   A     34   446     1  0
+## 12  9   B     28  1695     0  0</code></pre>
+<p>Now the model and a comparison using survfit. This approach uses a method called the <strong>infinitesimal jackknife</strong> to compute the pseudo-observations.</p>
+<pre class="r"><code>sfit &lt;- survfit(Surv(tstart, tstop, death) ~ trt, data = mdata)
+
+sfitm &lt;- summary(sfit, times = c(750))
+
+tinf &lt;- cumincglm(Surv(tstart, tstop, death) ~ trt, data = mdata,
+          time = 750, model.censoring = &quot;infjack&quot;, survival = TRUE)
+
+
+cbind(eventglm = tinf$coefficients,
+  survfit = c(sfitm$surv[1], diff(sfitm$surv)))</code></pre>
+<pre><code>##              eventglm   survfit
+## (Intercept) 0.5772110 0.5744712
+## trtB        0.1330378 0.1373734</code></pre>
+<p>Let <span class="math inline">\(T(P)\)</span> denote the functional of interest (e.g., the Aalen-Johansen functional) and <span class="math inline">\(T(\mathbb{P}_n)\)</span> its empirical counterpart, where <span class="math inline">\(\mathbb{P}_n = n^{-1}\sum_{i=1}^n \delta(x_i)\)</span> is the empirical measure based on <span class="math inline">\(n\)</span> iid observations.</p>
+<p>The jackknife pseudo-observations can be written</p>
+<p><span class="math display">\[T(\mathbb{P}_n) + (n - 1) (T(\mathbb{P}_n) - T(\mathbb{P}_{ni})) =\]</span> <span class="math display">\[T(\mathbb{P}_n) + (n - 1) (T(\mathbb{P}_n) - T\left(\frac{n\mathbb{P}_{n} - \delta(x_i)}{n-1}\right))\]</span></p>
+<p>where <span class="math inline">\(\mathbb{P}_{ni}\)</span> is the empirical measure leaving out the <span class="math inline">\(i\)</span>th observation.</p>
+<p>The influence function of <span class="math inline">\(T\)</span> evaluated at <span class="math inline">\(P\)</span> is <span class="math display">\[\phi_P(x) = \partial T(P - \delta(x))\]</span> is a functional derivative, i.e., an approximation of the original functional.</p>
+<p><span class="math display">\[\phi_P(x) \approx \lim_{\epsilon \rightarrow 0}\frac{T(P) - T(P + \epsilon(\delta(x) - P))}{\epsilon}\]</span></p>
+<p>If we can calculate this, then <span class="math inline">\(\phi_{\mathbb{P}_n}(x_i)\)</span> gives us the perturbation in the estimate infinitesimally close to <span class="math inline">\(x_i\)</span>, whereas the ordinary jackknife is <span class="math inline">\(1/n\)</span> units away. See Efron (1982), Chapter 6.</p>
+<p>These are computed already in <code>survival</code> for variance estimation, which is what the <code>pseudo_infjack</code> uses. These can be computed stratified on a finite set of categorical covariates using the <code>model.censoring</code> argument.</p>
+<div id="stop-and-think" class="section level4 alert alert-info">
+<h4 class="alert alert-info">Stop and think</h4>
+<p>In your research, what censoring assumptions are plausible/reasonable? How would you model the censoring to operate under those assumptions?</p>
+</div>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2 class="unnumbered">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-aalen1978empirical" class="csl-entry">
+Aalen, Odd O, and Søren Johansen. 1978. <span>“An Empirical Transition Matrix for Non-Homogeneous Markov Chains Based on Censored Observations.”</span> <em>Scandinavian Journal of Statistics</em>, 141–50.
+</div>
+<div id="ref-andersen_generalised_2003" class="csl-entry">
+Andersen, Per Kragh, John P. Klein, and Susanne Rosthøj. 2003. <span>“Generalised Linear Models for Correlated Pseudo‐observations, with Applications to Multi‐state Models.”</span> <em>Biometrika</em> 90 (1): 15–27. <a href="https://doi.org/10.1093/biomet/90.1.15">https://doi.org/10.1093/biomet/90.1.15</a>.
+</div>
+<div id="ref-andersen_pseudo-observations_2010" class="csl-entry">
+Andersen, Per Kragh, and Maja Pohar Perme. 2010. <span>“Pseudo-Observations in Survival Analysis.”</span> <em>Statistical Methods in Medical Research</em> 19 (1): 71–99. <a href="https://doi.org/10.1177/0962280209105020">https://doi.org/10.1177/0962280209105020</a>.
+</div>
+<div id="ref-binder2014pseudo" class="csl-entry">
+Binder, Nadine, Thomas A Gerds, and Per Kragh Andersen. 2014. <span>“Pseudo-Observations for Competing Risks with Covariate Dependent Censoring.”</span> <em>Lifetime Data Analysis</em> 20 (2): 303–15.
+</div>
+<div id="ref-kaplan1958nonparametric" class="csl-entry">
+Kaplan, Edward L, and Paul Meier. 1958. <span>“Nonparametric Estimation from Incomplete Observations.”</span> <em>Journal of the American Statistical Association</em> 53 (282): 457–81.
+</div>
+<div id="ref-nygaard2020regression" class="csl-entry">
+Nygård Johansen, Martin, Søren Lundbye-Christensen, and Erik Thorlund Parner. 2020. <span>“Regression Models Using Parametric Pseudo-Observations.”</span> <em>Statistics in Medicine</em>.
+</div>
+<div id="ref-overgaard2019pseudo" class="csl-entry">
+Overgaard, Morten, Erik Thorlund Parner, and Jan Pedersen. 2019. <span>“Pseudo-Observations Under Covariate-Dependent Censoring.”</span> <em>Journal of Statistical Planning and Inference</em> 202: 112–22.
+</div>
+<div id="ref-sabathe2020regression" class="csl-entry">
+Sabathé, Camille, Per K Andersen, Catherine Helmer, Thomas A Gerds, Hélène Jacqmin-Gadda, and Pierre Joly. 2020. <span>“Regression Analysis in an Illness-Death Model with Interval-Censored Data: A Pseudo-Value Approach.”</span> <em>Statistical Methods in Medical Research</em> 29 (3): 752–64.
+</div>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNlbnNvcmluZyBhc3N1bXB0aW9ucyBhbmQgbW9kZWxzIg0Kb3V0cHV0Og0KICBodG1sX2RvY3VtZW50Og0KICAgIGNvZGVfZm9sZGluZzogc2hvdw0KYmlibGlvZ3JhcGh5OiByZWZzLmJpYg0KLS0tDQoNCiMjIyBMZWFybmluZyBvYmplY3RpdmVzIHsuYWxlcnQgLmFsZXJ0LXN1Y2Nlc3N9DQoNCkluIHRoaXMgbGVzc29uIHlvdSB3aWxsIA0KDQoxLiBVbmRlcnN0YW5kIGhvdyBjZW5zb3JpbmcgcGxheXMgYSByb2xlIGluIHRoZSBgZXZlbnRnbG1gIG1vZGVscw0KMi4gRXhwbG9yZSB0aGUgZGlmZmVyZW50IG9wdGlvbnMgZm9yIGNlbnNvcmluZyBtb2RlbHMNCjMuIExlYXJuIGhvdyB0byBjb25zdHJ1Y3QgbW9yZSBmbGV4aWJsZSBtb2RlbHMgZm9yIGNlbnNvcmluZw0KDQoNCiMjIFNldHVwDQoNCkxpYnJhcnkgdGhlIGBzdXJ2aXZhbGAgcGFja2FnZSBhbmQgdGhlbiB0aGUgYGV2ZW50Z2xtYCBwYWNrYWdlLiBXZSB3aWxsIHVzZSBzb21lIGNvbW1hbmRzIGZyb20gYHN1cnZpdmFsYCB0byBtYWtlIHNlbnNlIG9mIHdoYXQgaXMgZ29pbmcgb24gaW4gdGhlIHJlZ3Jlc3Npb24gbW9kZWxzLg0KDQoNCmBgYHtyfQ0KbGlicmFyeShzdXJ2aXZhbCkNCmxpYnJhcnkoZXZlbnRnbG0pDQpgYGANCg0KIyMgSG93IGRvZXMgYGV2ZW50Z2xtYCBlc3RpbWF0ZSB0aGUgbW9kZWxzPw0KDQpPdXIgbWFpbiBpbnRlcmVzdCBpcyBpbiBlc3RpbWF0aW5nIHRoZSBwYXJhbWV0ZXJzIG9mIGEgZ2VuZXJhbGl6ZWQgbGluZWFyIHJlZ3Jlc3Npb24gbW9kZWwgZm9yICRWX2kkIGNvbmRpdGlvbmFsIG9uIGNvdmFyaWF0ZXMgJFhfaSQ6IA0KXFsNCkUoVl9pIHwgWF9pKSA9IGdeey0xfVx7WF9pXntcdG9wfSBcYmV0YVx9LA0KXF0NCndoZXJlICRWX2kgPSBJKFRfaSA8IHQsIFxkZWx0YV9pID0gZCkkIGZvciBzb21lIHNwZWNpZmllZCB0aW1lICR0JCwgY2F1c2UgJGQkLCBhbmQgbGluayBmdW5jdGlvbiAkZyQuDQoNCldlIGRvIG5vdCBvYnNlcnZlICRUX2kkIGFuZCAkXGRlbHRhX2kkIGRpcmVjdGx5LCBidXQgcmF0aGVyICRZX2kgPSBcbWluXHtDX2ksIFRfaVx9JCB3aGVyZSAkQ19pJCBpcyB0aGUgY2Vuc29yaW5nIHRpbWUsIGFuZCAkXERlbHRhX2kgXGluIFx7MCwgMSwgXGxkb3RzLCBkXH0kIHdoZXJlIHdoZXJlIDAgaW5kaWNhdGVzIGNlbnNvcmluZyBvY2N1cnJlZCBiZWZvcmUgYW55IG9mIHRoZSBldmVudHMuIFRoZSBjb2xsZWN0aW9uIG9mIG9ic2VydmF0aW9ucyB3aWxsIGJlIGRlbm90ZWQgJFpfMSwgXGxkb3RzLCBaX24kIHdoZXJlICRaX2kgPSAoWV9pLCBcRGVsdGFfaSwgWF9pKSQsIGFuZCBhcmUgYXNzdW1lZCB0byBiZSBpbmRlcGVuZGVudCBhbmQgaWRlbnRpY2FsbHkgZGlzdHJpYnV0ZWQuDQoNCklmIHRoZXJlIHdlcmUgbm8gY2Vuc29yaW5nIGJlZm9yZSB0aW1lICR0XiokLCB0aGVuIHRoZSAkVl9pJCBhcmUgYWxsIG9ic2VydmVkIGZvciAkaSA9IDEsIFxsZG90cywgbiQgYW5kIHRoZSBwYXJhbWV0ZXJzIGNvdWxkIGJlIGVzdGltYXRlZCB1c2luZyBzdGFuZGFyZCBtZXRob2RzLiBXaGVuIHRoYXQgaXMgbm90IHRoZSBjYXNlLCB0aGUgbW9kZWwgY2FuIGJlIGVzdGltYXRlZCB1c2luZyBwc2V1ZG8tb2JzZXJ2YXRpb25zIEBhbmRlcnNlbl9nZW5lcmFsaXNlZF8yMDAzLiBMZXQgJFBfaSQgZGVub3RlIHRoZSBwc2V1ZG8tb2JzZXJ2YXRpb24gZm9yIHN1YmplY3QgJGkkIHdoaWNoIHdpbGwgcmVtYWluIGFic3RyYWN0IGZvciB0aGUgbW9tZW50LiBXaGVuIHRoZSBwc2V1ZG8tb2JzZXJ2YXRpb25zIGFyZSBjb21wdXRlZCBpbiBhIHdheSB0aGF0IA0KXFsNCkUoUF9pIHwgWF9pKSA9IEUoVl9pIHwgWF9pKSArIG9fcCgxKSANClxdDQppbiBsYXJnZSBzYW1wbGVzLCB0aGVuIGVzdGltYXRpbmcgJFxiZXRhJCBieSBzb2x2aW5nIHRoZSBlc3RpbWF0aW5nIGVxdWF0aW9ucw0KXFsNClxzdW1fe2kgPSAxfV5uIFxmcmFje1xwYXJ0aWFsIGdeey0xfX17XHBhcnRpYWwgXGJldGF9IEFfaV57LTF9IFx7UF9pIC0gZ157LTF9KFhfaV57XHRvcH0gXGJldGEpXH0gPSBcc3VtX3tpID0gMX1ebiBVX2koXGJldGEpID0gIDANClxdDQp5aWVsZHMgY29uc2lzdGVudCBhbmQgYXN5bXB0b3RpY2FsbHkgbm9ybWFsIGVzdGltYXRlcyAkXGhhdHtcYmV0YX0kLiANCg0KTGV0ICRcdGhldGEgPSBFKFZfaSkkIGRlbm90ZSB0aGUgY3VtdWxhdGl2ZSBzdW1tYXJ5IHN0YXRpc3RpYyBvZiBpbnRlcmVzdCBidXQgbWFyZ2luYWwgd2l0aCByZXNwZWN0IHRvIHRoZSBjb3ZhcmlhdGVzIChpLmUuLCBpZ25vcmluZyB0aGUgY292YXJpYXRlcykgYW5kICRcaGF0e1x0aGV0YX0kIGFuIGVzdGltYXRlIG9mIHRoYXQgcXVhbnRpdHkgdXNpbmcgYWxsIG9mIHRoZSBvYnNlcnZhdGlvbnMuIFRoZSBlc3RpbWF0b3IgaXMgZ2VuZXJhbGx5IG5vbnBhcmFtZXRyaWMsIGUuZy4sIHRoZSBBYWxlbi1Kb2hhbnNlbiBlc3RpbWF0b3IgW0BhYWxlbjE5NzhlbXBpcmljYWxdIG9mIHRoZSBjdW11bGF0aXZlIGluY2lkZW5jZSBjdXJ2ZSwgb3IgdGhlIEthcGxhbi1NZWllciBlc3RpbWF0b3IgW0BrYXBsYW4xOTU4bm9ucGFyYW1ldHJpY10gb2YgdGhlIHN1cnZpdm9yIGN1cnZlLCB0aG91Z2ggcmVjZW50bHkgcGFyYW1ldHJpYyBlc3RpbWF0b3JzIG9mIHRoZSBtYXJnaW5hbCBxdWFudGl0aWVzIGhhdmUgYmVlbiBzdWdnZXN0ZWQgW0BueWdhYXJkMjAyMHJlZ3Jlc3Npb24sIEBzYWJhdGhlMjAyMHJlZ3Jlc3Npb25dLiANCg0KTGV0ICRcaGF0e1x0aGV0YX1fey1pfSQgZGVub3RlIHRoZSBqYWNra25pZmUgZXN0aW1hdGUgb2J0YWluZWQgYnkgbGVhdmluZyB0aGUNCiRpJHRoIG9ic2VydmF0aW9uIG91dCBvZiB0aGUgc2FtcGxlIGFuZCByZWNvbXB1dGluZyB0aGUgZXN0aW1hdGUuIFRoZW4NCnRoZSAkaSR0aCBqYWNra25pZmUgcHNldWRvLW9ic2VydmF0aW9uIGlzDQpcWw0KUF9pID0gbiBcaGF0e1x0aGV0YX0gLSAobiAtIDEpIFxoYXR7XHRoZXRhfV97LWl9Lg0KXF0NCklmIGNlbnNvcmluZyBpcyBjb21wbGV0ZWx5IGluZGVwZW5kZW50LCB0aGVuIHRoZSBhc3ltcHRvdGljIGNvbmRpdGlvbmFsIHVuYmlhc2VkbmVzcyBjb25kaXRpb24gaG9sZHMuIA0KDQpJZiB3ZSBpbnN0ZWFkIGFzc3VtZSBmb3Igc29tZSBzdWJzZXQgb2YgY292YXJpYXRlcyAkXHRpbGRle1h9X2kkIHRoYXQgJChUX2ksIFhfaSwgXERlbHRhX2kpIFxwZXJwIENfaSB8IFx0aWxkZXtYfV9pJCB0aGVuIHdlIGNhbiB1c2UgZGlmZmVyZW50IGFwcHJvYWNoZXMgdG8gY29tcHV0aW5nIHRoZSBwc2V1ZG8tb2JzZXJ2YXRpb25zIHRoYXQgd2lsbCBzYXRpc2Z5IHRoZSBhc3ltcHRvdGljIGNvbmRpdGlvbmFsIHVuYmlhc2VkbmVzcy4gV2hlbiAkXHRpbGRle1h9X2kkIG9ubHkgY29udGFpbnMgY2F0ZWdvcmljYWwgY292YXJpYXRlcyB3aXRoIGEgZmluaXRlIHNldCBvZiBjb21iaW5hdGlvbnMsIEBhbmRlcnNlbl9wc2V1ZG8tb2JzZXJ2YXRpb25zXzIwMTAgc3VnZ2VzdGVkIGNvbXB1dGluZyB0aGUgamFja2tuaWZlICRQX2kkIHNlcGFyYXRlbHkgZm9yIGVhY2ggY29tYmluYXRpb24gb2YgdmFsdWVzIGluICRcdGlsZGV7WH1faSQuIFRoaXMgaXMgaW1wbGVtZW50ZWQgaW4gb3VyIHBhY2thZ2UgYW5kIGNhbiBiZSBvYnRhaW5lZCB1c2luZyB0aGUgYCBtb2RlbC5jZW5zb3JpbmcgPSAic3RyYXRpZmllZCJgIG9wdGlvbi4gDQoNCklmICRcdGlsZGV7WH1faSQgY29udGFpbnMgY29udGludW91cyBjb3ZhcmlhdGVzLCB0aGVuIHdlIGNhbiBtb2RlbCB0aGUgY2Vuc29yaW5nIG1lY2hhbmlzbSBjb25kaXRpb25hbCBvbiB0aG9zZSBjb3ZhcmlhdGVzIGFuZCB1c2UgYW4gaW52ZXJzZSBwcm9iYWJpbGl0eSBvZiBjZW5zb3Jpbmcgd2VpZ2h0ZWQgbWFyZ2luYWwgZXN0aW1hdG9yLiBNb2RlbGluZyB0aGUgY2Vuc29yaW5nIHByb2Nlc3MgY29uZGl0aW9uYWwgb24gY292YXJpYXRlcyBhbmQgdXNpbmcgaW52ZXJzZSBwcm9iYWJpbGl0eSBvZiBjZW5zb3Jpbmcgd2VpZ2h0ZWQgZXN0aW1hdG9ycyB3YXMgZmlyc3QgZXhwbG9yZWQgaW4gQGJpbmRlcjIwMTRwc2V1ZG8uIFRoaXMgd2FzIGZ1cnRoZXIgZGV2ZWxvcGVkIGluIEBvdmVyZ2FhcmQyMDE5cHNldWRvIHdobyBzaG93ZWQgdGhhdCBhc3ltcHRvdGljIGNvbmRpdGlvbmFsIHVuYmlhc2VkbmVzcyBob2xkcyBmb3IgaW52ZXJzZSBwcm9iYWJpbGl0eSBvZiBjZW5zb3Jpbmcgd2VpZ2h0ZWQgZXN0aW1hdG9ycyBvZiB0aGUgY3VtdWxhdGl2ZSBxdWFudGl0eSAkRShWX2kpJC4NCg0KIyMgQ2Vuc29yaW5nIG1vZGVscw0KDQpCeSBkZWZhdWx0LCB3ZSBhc3N1bWUgdGhhdCB0aW1lIHRvIGNlbnNvcmluZyBpcyBpbmRlcGVuZGVudCBvZiB0aGUgdGltZSB0byB0aGUgZXZlbnQsIF9fYW5kIG9mIGFsbCBjb3ZhcmlhdGVzIGluIHRoZSBtb2RlbF9fLiBUaGlzIGlzIG1vcmUgcmVzdHJpY3RpdmUgdGhhbiBwYXJhbWV0cmljIHN1cnZpdmFsIG1vZGVscywgb3IgQ294IHJlZ3Jlc3Npb24sIHdoaWNoIG9ubHkgYXNzdW1lcyB0aGF0IGNlbnNvcmluZyB0aW1lIGlzIGNvbmRpdGlvbmFsbHkgaW5kZXBlbmRlbnQgb2YgZXZlbnQgdGltZSBnaXZlbiB0aGUgY292YXJpYXRlcyBpbiB0aGUgbW9kZWwuIFdlIHByb3ZpZGUgc2V2ZXJhbCBvcHRpb25zIHRvIHJlbGF4IHRoYXQgYXNzdW1wdGlvbiB1c2luZyB0aGUgYG1vZGVsLmNlbnNvcmluZ2AgYW5kIGBmb3JtdWxhLmNlbnNvcmluZ2Agb3B0aW9ucy4gVGhlIGZpcnN0IGlzIHRvIGNvbXB1dGUgc3RyYXRpZmllZCBwc2V1ZG8gb2JzZXJ2YXRpb25zLCB3aGljaCBhc3N1bWVzIHRoYXQgdGhlIGNlbnNvcmluZyBpcyBpbmRlcGVuZGVudCBnaXZlbiBhIHNldCBvZiBjYXRlZ29yaWNhbCBjb3ZhcmlhdGVzOiANCg0KYGBge3J9DQoNCmNvbG9uLmNpLmFkaiA8LSBjdW1pbmNnbG0oU3Vydih0aW1lLCBzdGF0dXMpIH4gcnggKyBhZ2UgKyBub2RlNCwgdGltZSA9IDI1MDAsIGRhdGEgPSBjb2xvbikNCmNvbG9uLmNpLmNlbjEgPC0gY3VtaW5jZ2xtKFN1cnYodGltZSwgc3RhdHVzKSB+IHJ4ICsgYWdlICsgbm9kZTQsIHRpbWUgPSAyNTAwLCANCiAgICAgICAgICAgICAgICAgICAgICAgICAgIGRhdGEgPSBjb2xvbiwgbW9kZWwuY2Vuc29yaW5nID0gInN0cmF0aWZpZWQiLCANCiAgICAgICAgICAgICAgICAgICAgICAgICAgIGZvcm11bGEuY2Vuc29yaW5nID0gfiByeCkNCmBgYA0KDQpOZXh0LCB3ZSBjYW4gYXNzdW1lIHRoYXQgdGhlIHRpbWUgdG8gY2Vuc29yaW5nIGZvbGxvd3MgYSBDb3ggbW9kZWwgZ2l2ZW4gYSBzZXQgb2YgY292YXJpYXRlcy4gQnkgZGVmYXVsdCwgdGhlIHNhbWUgY292YXJpYXRlIGZvcm11bGEgKHJpZ2h0IGhhbmQgc2lkZSkgYXMgdGhlIG1haW4gbW9kZWwgaXMgdXNlZCwgYnV0IGFueSBmb3JtdWxhIGNhbiBiZSBzcGVjaWZpZWQuIFdlIGNhbiBhbHNvIHVzZSBBYWxlbnMgYWRkaXRpdmUgaGF6YXJkcyBtb2RlbCBpbnN0ZWFkIG9mIGEgQ294IG1vZGVsIGZvciB0aGUgY2Vuc29yaW5nIGRpc3RyaWJ1dGlvbi4gVGhlbiBpbnZlcnNlIHByb2JhYmlsaXR5IG9mIGNlbnNvcmluZyB3ZWlnaHRlZCBwc2V1ZG8gb2JzZXJ2YXRpb25zIGFyZSB1c2VkIFtAb3ZlcmdhYXJkMjAxOXBzZXVkb10uIEFjY29yZGluZyB0byBhIHNpbXVsYXRpb24gc3R1ZHksIHRoZSBzdHJhdGlmaWVkIG9wdGlvbiB3b3JrcyBxdWl0ZSB3ZWxsIGV2ZW4gd2hlbiB0aGUgY2Vuc29yaW5nIG1vZGVsIGlzIG1pc3NwZWNpZmllZCwgYW5kIHRoZSBBYWxlbiBhZGRpdGl2ZSBtb2RlbCB0ZW5kcyB0byB3b3JrIGJldHRlciB0aGFuIHRoZSBDb3ggbW9kZWwuIA0KDQpUaGUgYGlwY3cubWV0aG9kYCBhcmd1bWVudCBkZXRlcm1pbmVzIHRoZSB3ZWlnaHRpbmcgbWV0aG9kIHVzZWQsIHdpdGggdGhlIGRlZmF1bHQgYmVpbmcgImJpbmRlciIgYW5kIHRoZSBvdGhlciBvcHRpb24gaXMgImhhamVrIi4gVGhlIGludGVyY2VwdCBlc3RpbWF0ZSB0ZW5kcyB0byBiZSBvZmYgd2hlbiB1c2luZyAiYmluZGVyIiBzbyBiZSBhd2FyZSBvZiB0aGF0IGlmIGl0IGlzIGltcG9ydGFudCB0byB5b3UuIA0KDQpgYGB7cn0NCmNvbG9uLmNpLmNlbjIgPC0gY3VtaW5jZ2xtKFN1cnYodGltZSwgc3RhdHVzKSB+IHJ4ICsgYWdlICsgbm9kZTQsIHRpbWUgPSAyNTAwLCANCiAgICAgICAgICAgICAgICAgICAgICAgICAgIGRhdGEgPSBjb2xvbiwgbW9kZWwuY2Vuc29yaW5nID0gImNveHBoIiwgDQogICAgICAgICAgICAgICAgICAgICAgICAgICBmb3JtdWxhLmNlbnNvcmluZyA9IH4gcnggKyBhZ2UgKyBub2RlNCkNCmNvbG9uLmNpLmNlbjMgPC0gY3VtaW5jZ2xtKFN1cnYodGltZSwgc3RhdHVzKSB+IHJ4ICsgYWdlICsgbm9kZTQsIHRpbWUgPSAyNTAwLCANCiAgICAgICAgICAgICAgICAgICAgICAgICAgIGRhdGEgPSBjb2xvbiwgbW9kZWwuY2Vuc29yaW5nID0gImFhcmVnIiwgDQogICAgICAgICAgICAgICAgICAgICAgICAgICBmb3JtdWxhLmNlbnNvcmluZyA9IH4gcnggKyBhZ2UgKyBub2RlNCkNCg0KY29sb24uY2kuY2VuMmggPC0gY3VtaW5jZ2xtKFN1cnYodGltZSwgc3RhdHVzKSB+IHJ4ICsgYWdlICsgbm9kZTQsIHRpbWUgPSAyNTAwLCANCiAgICAgICAgICAgICAgICAgICAgICAgICAgIGRhdGEgPSBjb2xvbiwgbW9kZWwuY2Vuc29yaW5nID0gImNveHBoIiwgDQogICAgICAgICAgICAgICAgICAgICAgICAgICBmb3JtdWxhLmNlbnNvcmluZyA9IH4gcnggKyBhZ2UgKyBub2RlNCwgaXBjdy5tZXRob2QgPSAiaGFqZWsiKQ0KY29sb24uY2kuY2VuM2ggPC0gY3VtaW5jZ2xtKFN1cnYodGltZSwgc3RhdHVzKSB+IHJ4ICsgYWdlICsgbm9kZTQsIHRpbWUgPSAyNTAwLCANCiAgICAgICAgICAgICAgICAgICAgICAgICAgIGRhdGEgPSBjb2xvbiwgbW9kZWwuY2Vuc29yaW5nID0gImFhcmVnIiwgDQogICAgICAgICAgICAgICAgICAgICAgICAgICBmb3JtdWxhLmNlbnNvcmluZyA9IH4gcnggKyBhZ2UgKyBub2RlNCwgaXBjdy5tZXRob2QgPSAiaGFqZWsiKQ0KDQpyb3VuZChjYmluZCgiaW5kZXAiID0gY29lZihjb2xvbi5jaS5hZGopLA0KICAic3RyYXQiID0gY29lZihjb2xvbi5jaS5jZW4xKSwNCiAgImNveGlwY3ciID0gY29lZihjb2xvbi5jaS5jZW4yKSwNCiAgImFhbGVuaXBjdyIgPSBjb2VmKGNvbG9uLmNpLmNlbjMpLA0KICAiY294aXBjdy5oYWplayIgPSBjb2VmKGNvbG9uLmNpLmNlbjJoKSwNCiAgImFhbGVuaXBjdy5oYWplayIgPSBjb2VmKGNvbG9uLmNpLmNlbjNoKSksIDMpDQpgYGANCg0KSW4gdGhlc2UgbW9kZWxzLCB0aGUgSVBDVyB3ZWlnaHRzIGFyZSByZXR1cm5lZCBpbiB0aGUgZWxlbWVudCBjYWxsZWQgImlwY3cud2VpZ2h0cyIuIElmIHRoZXJlIGFyZSBtdWx0aXBsZSB0aW1lIHBvaW50cywgdGhpcyB3aWxsIGJlIGEgbWF0cml4IHdpdGggb25lIGNvbHVtbiBwZXIgdGltZSBwb2ludC4gDQoNCmBgYHtyfQ0KY29sb24uY2kuY2VuMmIgPC0gY3VtaW5jZ2xtKFN1cnYodGltZSwgc3RhdHVzKSB+IHJ4ICsgYWdlICsgbm9kZTQsIA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRpbWUgPSBjKDUwMCwgMTAwMCwgMjUwMCksIA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgZGF0YSA9IGNvbG9uLCBtb2RlbC5jZW5zb3JpbmcgPSAiY294cGgiLCANCiAgICAgICAgICAgICAgICAgICAgICAgICAgIGZvcm11bGEuY2Vuc29yaW5nID0gfiByeCArIGFnZSArIG5vZGU0KQ0KaGVhZChjb2xvbi5jaS5jZW4yYiRpcGN3LndlaWdodHMpDQpzdW1tYXJ5KGNvbG9uLmNpLmNlbjJiJGlwY3cud2VpZ2h0cykNCmBgYA0KDQoNCiMjIExlZnQgdHJ1bmNhdGlvbiBhbmQgZGVsYXllZCBlbnRyeSANCg0KQSBuZXcgZmVhdHVyZSBpbiBgZXZlbnRnbG1gIChhdmFpbGFibGUgaW4gdmVyc2lvbiAxLjMuMCkgaXMgYSBtb2R1bGUgdG8gZml0IG1vZGVscyB0aGF0IGFsbG93IGZvciBkZWxheWVkIGVudHJ5L2xlZnQgdHJ1bmNhdGlvbi4gVGhpcyBpcyBkb25lIGJ5IHNwZWNpZnlpbmcgMiB0aW1lcyBhbmQgYW4gZXZlbnQgaW4gdGhlIGNhbGwgdG8gYFN1cnZgIGFuZCB1c2luZyAiaW5mamFjayIgZm9yIHRoZSBgbW9kZWwuY2Vuc29yaW5nYCBhcmd1bWVudC4gQW5vdGhlciBhc3N1bXB0aW9uIGluIHRoaXMgc2V0dGluZ3MgaXMgdGhhdCB0aGUgZW50cnkgdGltZSBpcyBpbmRlcGVuZGVudCBvZiB0aGUgdGltZSB0byBldmVudCBhbmQgYWxsIGNvdmFyaWF0ZXMgaW4gdGhlIG1vZGVsLiBDdXJyZW50bHkgdGhlcmUgYXJlIG5vIG9wdGlvbnMgdG8gcmVsYXggdGhhdC4gDQpMZXQncyBsb29rIGF0IGFuIGV4YW1wbGUgdXNpbmcgdGhlIGBteWVsb2lkYCBkYXRhc2V0IGZyb20gdGhlIGBzdXJ2aXZhbGAgcGFja2FnZS4gVGhpcyBpcyBhIG1vcmUgY29tcGxleCBtdWx0aS1zdGF0ZSBtb2RlbCwgYnV0IGZvciBub3cgd2UgYXJlIG9ubHkgY29uc2lkZXJpbmcgYSBtb2RlbCBmb3IgdGhlIHRyYW5zaXRpb24gZnJvbSBjb21wbGV0ZSByZXNwb25zZSAoQ1IpIHRvIGRlYXRoLCBjb25kaXRpb25hbCBvbiBoYXZpbmcgcmVhY2hlZCBjb21wbGV0ZSByZXNwb25zZS4gVGhlIHRpbWUgZnJvbSBlbnRyeSB0byBjb21wbGV0ZSByZXNwb25zZSBkZXRlcm1pbmVzIHRoZSBlbnRyeSB0aW1lLiAgDQoNCmBgYHtyfQ0KY29ubmVjdCA8LSBtYXRyaXgoMCwgbnJvdyA9IDUsIG5jb2wgPSA1LCANCiAgICAgICAgICAgICAgICAgIGRpbW5hbWVzID0gbGFwcGx5KDE6MiwgXChpKSBjKCJFbnRyeSIsICJEZWF0aCIsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiQ1IiLCAiUmVsYXBzZSIsICJUcmFuc3BsYW50IikpKQ0KY29ubmVjdFsxLCAyOjVdIDwtIDENCmNvbm5lY3RbNSwgMjo1XSA8LSAxDQpjb25uZWN0WzMsIDI6NV0gPC0gMQ0KY29ubmVjdFs0LCBjKDIsIDQsIDUpXSA8LSAxDQoNCnN0YXRlZmlnKGMoMiwgMyksIGNvbm5lY3QpDQoNCm1kYXRhIDwtIHRtZXJnZShteWVsb2lkWyFpcy5uYShteWVsb2lkJGNydGltZSksMToyXSwgbXllbG9pZFshaXMubmEobXllbG9pZCRjcnRpbWUpLF0sDQogICAgICAgICAgICAgICAgICBpZD1pZCwgZGVhdGg9IGV2ZW50KGZ1dGltZSwgZGVhdGgpLA0KICAgICAgICAgICAgICAgICAgY3IgPSBldmVudChjcnRpbWUpKQ0KbWRhdGEgPC0gbWRhdGFbbWRhdGEkY3IgPT0gMCxdDQpoZWFkKG1kYXRhKQ0KYGBgDQoNCk5vdyB0aGUgbW9kZWwgYW5kIGEgY29tcGFyaXNvbiB1c2luZyBzdXJ2Zml0LiBUaGlzIGFwcHJvYWNoIHVzZXMgYSBtZXRob2QgY2FsbGVkIHRoZSBfX2luZmluaXRlc2ltYWwgamFja2tuaWZlX18gdG8gY29tcHV0ZSB0aGUgcHNldWRvLW9ic2VydmF0aW9ucy4gDQoNCmBgYHtyfQ0Kc2ZpdCA8LSBzdXJ2Zml0KFN1cnYodHN0YXJ0LCB0c3RvcCwgZGVhdGgpIH4gdHJ0LCBkYXRhID0gbWRhdGEpDQoNCnNmaXRtIDwtIHN1bW1hcnkoc2ZpdCwgdGltZXMgPSBjKDc1MCkpDQoNCnRpbmYgPC0gY3VtaW5jZ2xtKFN1cnYodHN0YXJ0LCB0c3RvcCwgZGVhdGgpIH4gdHJ0LCBkYXRhID0gbWRhdGEsDQogICAgICAgICAgdGltZSA9IDc1MCwgbW9kZWwuY2Vuc29yaW5nID0gImluZmphY2siLCBzdXJ2aXZhbCA9IFRSVUUpDQoNCg0KY2JpbmQoZXZlbnRnbG0gPSB0aW5mJGNvZWZmaWNpZW50cywNCiAgc3VydmZpdCA9IGMoc2ZpdG0kc3VydlsxXSwgZGlmZihzZml0bSRzdXJ2KSkpDQoNCmBgYA0KDQpMZXQgJFQoUCkkIGRlbm90ZSB0aGUgZnVuY3Rpb25hbCBvZiBpbnRlcmVzdCAoZS5nLiwgdGhlIEFhbGVuLUpvaGFuc2VuIGZ1bmN0aW9uYWwpIGFuZCAkVChcbWF0aGJie1B9X24pJCBpdHMgZW1waXJpY2FsIGNvdW50ZXJwYXJ0LCB3aGVyZSAkXG1hdGhiYntQfV9uID0gbl57LTF9XHN1bV97aT0xfV5uIFxkZWx0YSh4X2kpJCBpcyB0aGUgZW1waXJpY2FsIG1lYXN1cmUgYmFzZWQgb24gJG4kIGlpZCBvYnNlcnZhdGlvbnMuDQoNClRoZSBqYWNra25pZmUgcHNldWRvLW9ic2VydmF0aW9ucyBjYW4gYmUgd3JpdHRlbiANCg0KJCRUKFxtYXRoYmJ7UH1fbikgKyAobiAtIDEpIChUKFxtYXRoYmJ7UH1fbikgLSBUKFxtYXRoYmJ7UH1fe25pfSkpID0kJA0KJCRUKFxtYXRoYmJ7UH1fbikgKyAobiAtIDEpIChUKFxtYXRoYmJ7UH1fbikgLSBUXGxlZnQoXGZyYWN7blxtYXRoYmJ7UH1fe259IC0gXGRlbHRhKHhfaSl9e24tMX1ccmlnaHQpKSQkDQoNCndoZXJlICRcbWF0aGJie1B9X3tuaX0kIGlzIHRoZSBlbXBpcmljYWwgbWVhc3VyZSBsZWF2aW5nIG91dCB0aGUgJGkkdGggb2JzZXJ2YXRpb24uDQoNClRoZSBpbmZsdWVuY2UgZnVuY3Rpb24gb2YgJFQkIGV2YWx1YXRlZCBhdCAkUCQgaXMgJCRccGhpX1AoeCkgPSBccGFydGlhbCBUKFAgLSBcZGVsdGEoeCkpJCQgaXMgYSBmdW5jdGlvbmFsIGRlcml2YXRpdmUsIGkuZS4sIGFuIGFwcHJveGltYXRpb24gb2YgdGhlIG9yaWdpbmFsIGZ1bmN0aW9uYWwuIA0KDQokJFxwaGlfUCh4KSBcYXBwcm94IFxsaW1fe1xlcHNpbG9uIFxyaWdodGFycm93IDB9XGZyYWN7VChQKSAtIFQoUCArIFxlcHNpbG9uKFxkZWx0YSh4KSAtIFApKX17XGVwc2lsb259JCQNCg0KSWYgd2UgY2FuIGNhbGN1bGF0ZSB0aGlzLCB0aGVuICRccGhpX3tcbWF0aGJie1B9X259KHhfaSkkIGdpdmVzIHVzIHRoZSBwZXJ0dXJiYXRpb24gaW4gdGhlIGVzdGltYXRlIGluZmluaXRlc2ltYWxseSBjbG9zZSB0byAkeF9pJCwgd2hlcmVhcyB0aGUgb3JkaW5hcnkgamFja2tuaWZlIGlzICQxL24kIHVuaXRzIGF3YXkuIFNlZSBFZnJvbiAoMTk4MiksIENoYXB0ZXIgNi4gDQoNClRoZXNlIGFyZSBjb21wdXRlZCBhbHJlYWR5IGluIGBzdXJ2aXZhbGAgZm9yIHZhcmlhbmNlIGVzdGltYXRpb24sIHdoaWNoIGlzIHdoYXQgdGhlIGBwc2V1ZG9faW5mamFja2AgdXNlcy4gVGhlc2UgY2FuIGJlIGNvbXB1dGVkIHN0cmF0aWZpZWQgb24gYSBmaW5pdGUgc2V0IG9mIGNhdGVnb3JpY2FsIGNvdmFyaWF0ZXMgdXNpbmcgdGhlIGBtb2RlbC5jZW5zb3JpbmdgIGFyZ3VtZW50LiANCg0KDQoNCiMjIyMgU3RvcCBhbmQgdGhpbmsgey5hbGVydCAuYWxlcnQtaW5mb30NCg0KSW4geW91ciByZXNlYXJjaCwgd2hhdCBjZW5zb3JpbmcgYXNzdW1wdGlvbnMgYXJlIHBsYXVzaWJsZS9yZWFzb25hYmxlPyBIb3cgd291bGQgeW91IG1vZGVsIHRoZSBjZW5zb3JpbmcgdG8gb3BlcmF0ZSB1bmRlciB0aG9zZSBhc3N1bXB0aW9ucz8gDQoNCg0KIyMgUmVmZXJlbmNlcw0KDQo=</div>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("censoring.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+---
+title: "Multiple causes and times"
+output:
+  html_document:
+    code_folding: show
+bibliography: refs.bib
+---
+
+### Learning objectives {.alert .alert-success}
+
+In this lesson you will 
+
+1. Fit and understand basic models for competing risks settings
+2. Fit and understand basic joint models for multiple time points of interest
+3. Compare and contrast the eventglm models with cloglog link to Cox regression models
+
+## Setup
+
+Library the `survival` package and then the `eventglm` package. We will use some commands from `survival` to make sense of what is going on in the regression models.
+
+
+```{r}
+library(survival)
+library(eventglm)
+```
+
+## Monoclonal gammopathy data (Competing risks)
+
+Our next example involves the `mgus2` dataset, included in the package: 
+
+```{r, eval = 2}
+?mgus2
+head(mgus2)
+```
+
+This dataset has a number of covariates, and the time until progression to plasma cell malignancy (PCM), or death. Here the event PCM is of primary interest, with death being a competing event. The data are described and analyzed in the survival vignette (section 2.3.2): 
+
+```{r}
+crfit <- survfit(Surv(etime, event) ~ sex, eventglm::mgus2)
+summary(crfit, times = 120)
+print(crfit, rmean = 120)
+plot(crfit, col=1:2,  noplot="",
+     lty=c(3,3,2,2,1,1), lwd=2, xscale=12,
+     xlab="Years post diagnosis", ylab="P(state)")
+legend(240, .65, c("Female, death", "Male, death", "malignancy", "(s0)"),
+       lty=c(1,1,2,3), col=c(1,2,1,1), bty='n', lwd=2)
+abline(v = 120, lty = 2)
+```
+
+This is the _competing risks_ setting, which can be described with the multi-state model in the figure below. 
+
+```{r}
+connect <- matrix(0, nrow = 3, ncol = 3, 
+                  dimnames = lapply(1:2, \(i) c("MGUS", "PCM", "Death")))
+connect[1, 2:3] <- 1
+statefig(c(1, 2), connect)
+```
+
+
+We can get similar estimates for the cumulative incidence of pcm at 10 years and the expected lifetime lost due to pcm up to 10 years with similar commands as above. Note the `cause` option to specify the cause of interest.
+
+```{r}
+mgfitci <- cumincglm(Surv(etime, event) ~ sex, cause = "pcm", 
+                     time = 120, data = mgus2)
+summary(mgfitci)
+mgfitrmean <- rmeanglm(Surv(etime, event) ~ sex, cause = "pcm", 
+                       time = 120, data = mgus2)
+summary(mgfitrmean)
+```
+
+This time the models are 
+\[
+P(T \leq 120 \mbox{ and } \delta = \mbox{PCM} | \mbox{sex}) = \beta_0 + \beta_1 I(sex = "M")
+\] 
+for the cause specific cumulative incidence, and 
+\[
+E((120 - T \wedge 120)I(\delta = \mbox{PCM}) | \mbox{sex}) = \beta_0 + \beta_1 I(sex = "M")
+\] 
+for the second model. The latter is interpreted as the _expected lifetime lost due to PCM up to 120 months_. See @andersen2013decomposition for more details on this quantity. 
+
+
+
+### Exercise {.alert .alert-warning}
+
+Look at the mgus2 dataset, summarize the variables in the data, and read the help file for mgus2 in the eventglm documentation. Then specify and fit a regression model to answer a particular scientific question for this dataset. Interpret the relevant coefficients from the model. 
+
+<details>
+<summary><strong>Solution</strong></summary>
+
+```{r}
+summary(mgus2)
+```
+
+The purpose of this study was to determine whether there are any reliable predictors of progression to malignancy. 
+
+```{r}
+mgfitci2 <- cumincglm(Surv(etime, event) ~ sex + age + hgb + creat + mspike, 
+                      cause = "pcm", 
+                      time = 120, data = mgus2)
+summary(mgfitci2)
+mgfitrmean2 <- rmeanglm(Surv(etime, event) ~ sex + age + hgb + creat + mspike, 
+                        cause = "pcm", 
+                      time = 120, data = mgus2)
+summary(mgfitrmean2)
+```
+
+The size of the monoclonal serum spike appears to be an independent predictor of the risk of pcm within 10 years, with a 5.7% higher risk for each unit increase in mspike, adjusted for creatinine, hemoglobin, age and sex. Likewise, a unit increase in mspike is associated with an expected 4 months lifetime lost due to PCM, adjusted for the other variables. 
+
+The objects returned by `cumincglm` and `rmeanglm` inherit from `glm`, so many methods are available, including `predict` and `resid`. Residuals use the scaling factor suggested by @perme2008checking, as do predictions. Predicted restricted means give a possible method to predict individual event times, while the predicted cumulative incidence should be probabilities. Note that with the identity link, the predicted cumulative incidence is not guaranteed to be between 0 and 1. 
+
+```{r}
+hist(predict(mgfitrmean2, newdata = mgus2), 
+     xlab = "Predicted lifetime lost due to PCM", main = "")
+mgus2$prob.pcm10 <- predict(mgfitci2, newdata = mgus2)
+mgus2$pseudo.ci <- mgfitci$y
+summary(mgus2$prob.pcm10)
+cutps <- quantile(mgus2$prob.pcm10, seq(.1, .9, by = .1), na.rm = TRUE)
+mgus2$prob.cut <- cut(mgus2$prob.pcm10, 
+                      cutps)
+pred.p <- cutps[-length(cutps)] + diff(cutps)
+obs.p <- c(by(mgus2$pseudo.ci, mgus2$prob.cut, mean))
+plot(obs.p ~ pred.p, xlab = "predicted 10 year risk", ylab = "observed 10 year risk")
+abline(0, 1)
+```
+</details>
+
+
+
+## Joint modelling over multiple times
+
+You can specify a vector of times in `cumincglm` to get a model that assumes the effect of the covariate is constant over those times. Let's see how this works in the `colon` example.
+
+```{r}
+mvtfit1 <- cumincglm(Surv(time, status) ~ rx, 
+        time = c(500, 1000, 1500, 2000, 2500),
+        data = colon, survival = TRUE)
+summary(mvtfit1)
+```
+
+This fits the model (in general terms)
+$$g\{P(T_i < t_b| X_i = x_i)\} = (\beta_0 + \beta_b) + \beta_1x_i, b = 1, \ldots, k.$$
+
+In this model, the intercept is the survival probability in the Obs arm at time 500 (the reference time). The terms labeled `factor(pseudo.time)t` represent the change in the intercept associated with the time `t`. So, for example, the survival probability in the Obs arm at time 1000 is `r round(coef(mvtfit1)[1], 2)` + `r round(coef(mvtfit1)[2], 2)` = `r round(sum(coef(mvtfit1)[1:2]), 2)`.
+
+Looking at the survival curves in previous lesson, the assumption of a constant treatment effect on the survival difference scale may be questionable. We can allow covariate effects to be time dependent by wrapping them in the special term `tve()` in the right side of the formula. 
+
+
+```{r}
+mvtfit2 <- cumincglm(Surv(time, status) ~ tve(rx), 
+        time = c(500, 1000, 1500, 2000, 2500),
+        data = colon, survival = TRUE)
+summary(mvtfit2)
+```
+
+This fits the model
+
+$$g\{P(T_i < t_b| X_i = x_i)\} = (\beta_0 + \beta_b) + \gamma_b x_i, b = 1, \ldots, k$$
+
+
+Now the coefficients labeled `factor(pseudo.time)t:Covariate` represent the covariate effect at time `t`. So, for example, the difference in survival probabilities of Levamisole plus 5-FU to Observation at time 1500 is 
+
+```{r} 
+round(summary(mvtfit2)$coefficients[13,, drop = FALSE],2)
+``` 
+
+Compare with the estimate from survfit: 
+
+```{r}
+sfit <- survfit(Surv(time, status) ~ rx, data = colon)
+round(summary(sfit, times = 1500)$surv[3] - 
+  summary(sfit, times = 1500)$surv[1], 2)
+```
+
+The key advantage of the regression approach is that we can adjust for covariates, do inference directly, and have more flexible models. The `tve` term allows you to have a mix of time-varying and time-constant effects. Just apply it to any covariate that you want to be time-varying.
+
+
+### Exercise {.alert .alert-warning}
+
+In the `mvtfit2` model, construct a procedure to test the null hypothesis that there is no difference in survival comparing Lev+5FU to the Obs group _at any of the 5 times_ in the model. 
+
+<details>
+<summary><strong>Solution</strong></summary>
+The null hypothesis is that the 5 coefficients with the label `rxLev+5FU` are simultaneously equal to 0. We can test this by doing a Wald test manually using the estimated covariance matrix of the estimated coefficients: 
+
+```{r}
+tdex <- grep("rxLev+5FU", names(coef(mvtfit2)), fixed = TRUE)
+
+Wstat <- c(t(coef(mvtfit2)[tdex]) %*% 
+             solve(vcov(mvtfit2)[tdex, tdex]) %*% 
+             coef(mvtfit2)[tdex])
+## under the null this is Chisq with 5 degrees of freedom
+pchisq(Wstat, df = length(tdex), lower.tail = FALSE)
+
+```
+
+</details>
+
+
+### Relationship to the Cox model
+
+The `cloglog` link function stands for "complementary log-log", and is defined $g(x) = \log(-\log(1 - x))$. Hence a model for the cumulative incidence with the cloglog link is
+\[
+\log( -\log(1 - P(T \leq t | X))) = \beta_0 + \beta_1 X. 
+\]
+Recall that the cumulative hazard $H(t)$ is related to the survival: $S(t) = \exp(-H(t))$, so inverting this relationship we get from our model
+\[
+\log(H(t | X)) = \beta_0 + \beta_1 X.
+\]
+
+If a proportional hazards Cox model holds then
+\[
+S(t | X) = \exp(- H_0(t) \exp(\gamma X))
+\]
+where $H_0(t) = H(t | X = 0)$, or equivalently
+\[
+\log(-\log(S(t | X))) = \log(H_0(t)) + \gamma X.
+\]
+
+Thus fitting a `cumincglm` model should give us similar results as a Cox model. Let's try it on the colon dataset. 
+
+```{r}
+## dummy variable for the treatment group
+colon$rxLev5FU <- 1.0 * (colon$rx == "Lev+5FU")
+
+colon.cll <- cumincglm(Surv(time, status) ~ rxLev5FU, data = colon, 
+                       time = 1500, link = "cloglog")
+summary(colon.cll)
+
+colon.cox <- coxph(Surv(time, status) ~ rxLev5FU, data = colon)
+summary(colon.cox)
+```
+
+
+The coefficients are similar, but not that close comparing the two model results. 
+
+#### Stop and think {.alert .alert-info}
+
+How are the modeling assumptions different between the two models in the previous code chunk? How can we modify the cumincglm model to get estimates closer to the Cox model? 
+
+<details>
+<summary><strong>Solution</strong></summary>
+The key difference is that the cumincglm model is assuming proportional hazards, but __only at one time point__ (1500). We can modify this to a multiple time point model, where we do _not_ want the coefficient to vary in time. If we do allow the coefficient for Lev+5FU to vary in time, then we would get something similar to a Cox model with time varying coefficients. 
+
+
+```{r}
+colon.cll2 <- cumincglm(Surv(time, status) ~ rxLev5FU, data = colon, 
+                       time = c(500, 1000, 1500, 2000, 2500), link = "cloglog")
+summary(colon.cll2)
+summary(colon.cox)
+
+coef(colon.cll2)[6]
+coef(colon.cox)
+```
+
+</details>
+
+
+## References
+

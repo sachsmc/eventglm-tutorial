@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>References and resources</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Using the `eventglm` R package for regression modeling of censored time-to-event outcomes</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lessons
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="basics.html">Lesson 1: Basics</a>
+    </li>
+    <li>
+      <a href="cmprisk.html">Lesson 2: Multiple causes and times</a>
+    </li>
+    <li>
+      <a href="censoring.html">Lesson 3: Censoring models</a>
+    </li>
+    <li>
+      <a href="multivar.html">Lesson 4: Multivariate outcome models</a>
+    </li>
+    <li>
+      <a href="extending.html">Lesson 5: Custom pseudo observation modules</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="biblio.html">References and resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">References and resources</h1>
+
+</div>
+
+
+<p>The primary reference for the generalized linear model using pseudo-observations is <span class="citation">Per Kragh Andersen, Klein, and Rosthøj (2003)</span>. A more accesible review and summary of the method is <span class="citation">Per Kragh Andersen and Pohar Perme (2010)</span>. The theoretical properties of the models have been studied by <span class="citation">Graw, Gerds, and Schumacher (2009)</span>, <span class="citation">Jacobsen and Martinussen (2016)</span>, and <span class="citation">Overgaard et al. (2017)</span>. The methods for dealing with covariate dependent censoring are described in <span class="citation">Binder, Gerds, and Andersen (2014)</span>, <span class="citation">Overgaard, Parner, and Pedersen (2019)</span>, and <span class="citation">Schoenenberger López (2018)</span>.</p>
+<p>Various other extensions and uses of pseudo observations have been proposed (but this list is not comprehensive): relative survival <span class="citation">(Pavlič and Pohar Perme 2019)</span>, causal inference <span class="citation">(Per K. Andersen, Syriopoulou, and Parner 2017)</span>, case-cohort studies <span class="citation">(Parner, Andersen, and Overgaard 2020)</span>, model checking <span class="citation">(Perme and Andersen 2008)</span>, the illness-death model <span class="citation">(Sabathé et al. 2020)</span>, parametric pseudo-observations <span class="citation">(Nygård Johansen, Lundbye-Christensen, and Thorlund Parner 2020)</span>, goodness of fit <span class="citation">(Pavlič, Martinussen, and Andersen 2019)</span>, recurrent events with death as a competing risk <span class="citation">(Per Kragh Andersen, Angst, and Ravn 2019)</span>, joint models with recurrent events <span class="citation">(Furberg et al. 2021)</span>.</p>
+<div id="bibliography" class="section level2 unnumbered">
+<h2 class="unnumbered">Bibliography</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-andersen2019modeling" class="csl-entry">
+Andersen, Per Kragh, Jules Angst, and Henrik Ravn. 2019. <span>“Modeling Marginal Features in Studies of Recurrent Events in the Presence of a Terminal Event.”</span> <em>Lifetime Data Analysis</em> 25 (4): 681–95.
+</div>
+<div id="ref-andersen_generalised_2003" class="csl-entry">
+Andersen, Per Kragh, John P. Klein, and Susanne Rosthøj. 2003. <span>“Generalised Linear Models for Correlated Pseudo‐observations, with Applications to Multi‐state Models.”</span> <em>Biometrika</em> 90 (1): 15–27. <a href="https://doi.org/10.1093/biomet/90.1.15">https://doi.org/10.1093/biomet/90.1.15</a>.
+</div>
+<div id="ref-andersen_pseudo-observations_2010" class="csl-entry">
+Andersen, Per Kragh, and Maja Pohar Perme. 2010. <span>“Pseudo-Observations in Survival Analysis.”</span> <em>Statistical Methods in Medical Research</em> 19 (1): 71–99. <a href="https://doi.org/10.1177/0962280209105020">https://doi.org/10.1177/0962280209105020</a>.
+</div>
+<div id="ref-andersen2017causal" class="csl-entry">
+Andersen, Per K, Elisavet Syriopoulou, and Erik T Parner. 2017. <span>“Causal Inference in Survival Analysis Using Pseudo-Observations.”</span> <em>Statistics in Medicine</em> 36 (17): 2669–81.
+</div>
+<div id="ref-binder2014pseudo" class="csl-entry">
+Binder, Nadine, Thomas A Gerds, and Per Kragh Andersen. 2014. <span>“Pseudo-Observations for Competing Risks with Covariate Dependent Censoring.”</span> <em>Lifetime Data Analysis</em> 20 (2): 303–15.
+</div>
+<div id="ref-furberg2021bivariate" class="csl-entry">
+Furberg, Julie K, Per K Andersen, Sofie Korn, Morten Overgaard, and Henrik Ravn. 2021. <span>“Bivariate Pseudo-Observations for Recurrent Event Analysis with Terminal Events.”</span> <em>Lifetime Data Analysis</em>, 1–32.
+</div>
+<div id="ref-graw2009pseudo" class="csl-entry">
+Graw, Frederik, Thomas A Gerds, and Martin Schumacher. 2009. <span>“On Pseudo-Values for Regression Analysis in Competing Risks Models.”</span> <em>Lifetime Data Analysis</em> 15 (2): 241–55.
+</div>
+<div id="ref-jacobsen2016note" class="csl-entry">
+Jacobsen, Martin, and Torben Martinussen. 2016. <span>“A Note on the Large Sample Properties of Estimators Based on Generalized Linear Models for Correlated Pseudo-Observations.”</span> <em>Scandinavian Journal of Statistics</em> 43 (3): 845–62.
+</div>
+<div id="ref-nygaard2020regression" class="csl-entry">
+Nygård Johansen, Martin, Søren Lundbye-Christensen, and Erik Thorlund Parner. 2020. <span>“Regression Models Using Parametric Pseudo-Observations.”</span> <em>Statistics in Medicine</em>.
+</div>
+<div id="ref-overgaard2017asymptotic" class="csl-entry">
+Overgaard, Morten, Erik Thorlund Parner, Jan Pedersen, et al. 2017. <span>“Asymptotic Theory of Generalized Estimating Equations Based on Jack-Knife Pseudo-Observations.”</span> <em>The Annals of Statistics</em> 45 (5): 1988–2015.
+</div>
+<div id="ref-overgaard2019pseudo" class="csl-entry">
+Overgaard, Morten, Erik Thorlund Parner, and Jan Pedersen. 2019. <span>“Pseudo-Observations Under Covariate-Dependent Censoring.”</span> <em>Journal of Statistical Planning and Inference</em> 202: 112–22.
+</div>
+<div id="ref-parner2020cumulative" class="csl-entry">
+Parner, Erik T, Per K Andersen, and Morten Overgaard. 2020. <span>“Cumulative Risk Regression in Case–Cohort Studies Using Pseudo-Observations.”</span> <em>Lifetime Data Analysis</em>, 1–20.
+</div>
+<div id="ref-pavlivc2019goodness" class="csl-entry">
+Pavlič, Klemen, Torben Martinussen, and Per Kragh Andersen. 2019. <span>“Goodness of Fit Tests for Estimating Equations Based on Pseudo-Observations.”</span> <em>Lifetime Data Analysis</em> 25 (2): 189–205.
+</div>
+<div id="ref-pavlivc2019using" class="csl-entry">
+Pavlič, Klemen, and Maja Pohar Perme. 2019. <span>“Using Pseudo-Observations for Estimation in Relative Survival.”</span> <em>Biostatistics</em> 20 (3): 384–99.
+</div>
+<div id="ref-perme2008checking" class="csl-entry">
+Perme, Maja Pohar, and Per Kragh Andersen. 2008. <span>“Checking Hazard Regression Models Using Pseudo-Observations.”</span> <em>Statistics in Medicine</em> 27 (25): 5309–28.
+</div>
+<div id="ref-sabathe2020regression" class="csl-entry">
+Sabathé, Camille, Per K Andersen, Catherine Helmer, Thomas A Gerds, Hélène Jacqmin-Gadda, and Pierre Joly. 2020. <span>“Regression Analysis in an Illness-Death Model with Interval-Censored Data: A Pseudo-Value Approach.”</span> <em>Statistical Methods in Medical Research</em> 29 (3): 752–64.
+</div>
+<div id="ref-schoenenberger2018modeling" class="csl-entry">
+Schoenenberger López, Andreu. 2018. <span>“Modeling Pseudo-Observations with Covariate Dependent Censoring: Robustness of the Method Against Misspecified Censoring Models.”</span> Master’s thesis, Universitat Polit<span>è</span>cnica de Catalunya.
+</div>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlJlZmVyZW5jZXMgYW5kIHJlc291cmNlcyINCm91dHB1dDoNCiAgaHRtbF9kb2N1bWVudDoNCiAgICBjb2RlX2ZvbGRpbmc6IHNob3cNCmJpYmxpb2dyYXBoeTogcmVmcy5iaWINCi0tLQ0KDQoNClRoZSBwcmltYXJ5IHJlZmVyZW5jZSBmb3IgdGhlIGdlbmVyYWxpemVkIGxpbmVhciBtb2RlbCB1c2luZyBwc2V1ZG8tb2JzZXJ2YXRpb25zIGlzIEBhbmRlcnNlbl9nZW5lcmFsaXNlZF8yMDAzLiBBIG1vcmUgYWNjZXNpYmxlIHJldmlldyBhbmQgc3VtbWFyeSBvZiB0aGUgbWV0aG9kIGlzIEBhbmRlcnNlbl9wc2V1ZG8tb2JzZXJ2YXRpb25zXzIwMTAuIFRoZSB0aGVvcmV0aWNhbCBwcm9wZXJ0aWVzIG9mIHRoZSBtb2RlbHMgaGF2ZSBiZWVuIHN0dWRpZWQgYnkgQGdyYXcyMDA5cHNldWRvLCBAamFjb2JzZW4yMDE2bm90ZSwgYW5kIEBvdmVyZ2FhcmQyMDE3YXN5bXB0b3RpYy4gVGhlIG1ldGhvZHMgZm9yIGRlYWxpbmcgd2l0aCBjb3ZhcmlhdGUgZGVwZW5kZW50IGNlbnNvcmluZyBhcmUgZGVzY3JpYmVkIGluIEBiaW5kZXIyMDE0cHNldWRvLCBAb3ZlcmdhYXJkMjAxOXBzZXVkbywgYW5kIEBzY2hvZW5lbmJlcmdlcjIwMThtb2RlbGluZy4gDQoNClZhcmlvdXMgb3RoZXIgZXh0ZW5zaW9ucyBhbmQgdXNlcyBvZiBwc2V1ZG8gb2JzZXJ2YXRpb25zIGhhdmUgYmVlbiBwcm9wb3NlZCAoYnV0IHRoaXMgbGlzdCBpcyBub3QgY29tcHJlaGVuc2l2ZSk6IHJlbGF0aXZlIHN1cnZpdmFsIFtAcGF2bGl2YzIwMTl1c2luZ10sIGNhdXNhbCBpbmZlcmVuY2UgW0BhbmRlcnNlbjIwMTdjYXVzYWxdLCBjYXNlLWNvaG9ydCBzdHVkaWVzIFtAcGFybmVyMjAyMGN1bXVsYXRpdmVdLCBtb2RlbCBjaGVja2luZyBbQHBlcm1lMjAwOGNoZWNraW5nXSwgdGhlIGlsbG5lc3MtZGVhdGggbW9kZWwgW0BzYWJhdGhlMjAyMHJlZ3Jlc3Npb25dLCBwYXJhbWV0cmljIHBzZXVkby1vYnNlcnZhdGlvbnMgW0BueWdhYXJkMjAyMHJlZ3Jlc3Npb25dLCBnb29kbmVzcyBvZiBmaXQgW0BwYXZsaXZjMjAxOWdvb2RuZXNzXSwgcmVjdXJyZW50IGV2ZW50cyB3aXRoIGRlYXRoIGFzIGEgY29tcGV0aW5nIHJpc2sgW0BhbmRlcnNlbjIwMTltb2RlbGluZ10sIGpvaW50IG1vZGVscyB3aXRoIHJlY3VycmVudCBldmVudHMgW0BmdXJiZXJnMjAyMWJpdmFyaWF0ZV0uDQoNCiMjIEJpYmxpb2dyYXBoeQ0K</div>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("biblio.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

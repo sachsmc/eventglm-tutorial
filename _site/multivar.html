@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Joint modelling multiple endpoints</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Using the `eventglm` R package for regression modeling of censored time-to-event outcomes</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lessons
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="basics.html">Lesson 1: Basics</a>
+    </li>
+    <li>
+      <a href="cmprisk.html">Lesson 2: Multiple causes and times</a>
+    </li>
+    <li>
+      <a href="censoring.html">Lesson 3: Censoring models</a>
+    </li>
+    <li>
+      <a href="multivar.html">Lesson 4: Multivariate outcome models</a>
+    </li>
+    <li>
+      <a href="extending.html">Lesson 5: Custom pseudo observation modules</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="biblio.html">References and resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Joint modelling multiple endpoints</h1>
+
+</div>
+
+
+<div id="learning-objectives" class="section level3 alert alert-success">
+<h3 class="alert alert-success">Learning objectives</h3>
+<p>In this lesson you will</p>
+<ol style="list-style-type: decimal">
+<li>Write a function to perform simultaneous inference for covariate effects on multiple outcomes in the competing risks setting.</li>
+</ol>
+</div>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<p>Library the <code>survival</code> package and then the <code>eventglm</code> package, and then the <code>geepack</code> package.</p>
+<pre class="r"><code>library(survival)
+library(eventglm)
+library(geepack)</code></pre>
+</div>
+<div id="joint-models" class="section level2">
+<h2>Joint models</h2>
+<p>Consider again the <code>mgus2</code> dataset. This is a competing risks setting, with the two possible causes of failure death and pcm.</p>
+<pre class="r"><code>crfit &lt;- survfit(Surv(etime, event) ~ sex, eventglm::mgus2)
+summary(crfit, times = 120)</code></pre>
+<pre><code>## Call: survfit(formula = Surv(etime, event) ~ sex, data = eventglm::mgus2)
+## 
+##                 sex=F 
+##     time   n.risk  n.event  P((s0))   P(pcm) P(death) 
+## 120.0000 214.0000 331.0000   0.4456   0.0739   0.4805 
+## 
+##                 sex=M 
+##     time   n.risk  n.event  P((s0))   P(pcm) P(death) 
+## 120.0000 210.0000 450.0000   0.3695   0.0553   0.5752</code></pre>
+<pre class="r"><code>print(crfit, rmean = 120)</code></pre>
+<pre><code>## Call: survfit(formula = Surv(etime, event) ~ sex, data = eventglm::mgus2)
+## 
+##                n nevent    rmean*
+## sex=F, (s0)  631      0 82.983485
+## sex=M, (s0)  753      0 74.808346
+## sex=F, pcm   631     59  4.794595
+## sex=M, pcm   753     56  3.501305
+## sex=F, death 631    370 32.221921
+## sex=M, death 753    490 41.690349
+##    *mean time in state, restricted (max time = 120 )</code></pre>
+<pre class="r"><code>plot(crfit, col=1:2,  noplot=&quot;&quot;,
+     lty=c(3,3,2,2,1,1), lwd=2, xscale=12,
+     xlab=&quot;Years post diagnosis&quot;, ylab=&quot;P(state)&quot;)
+legend(240, .65, c(&quot;Female, death&quot;, &quot;Male, death&quot;, &quot;malignancy&quot;, &quot;(s0)&quot;),
+       lty=c(1,1,2,3), col=c(1,2,1,1), bty=&#39;n&#39;, lwd=2)
+abline(v = 120, lty = 2)</code></pre>
+<p><img src="multivar_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>This is the <em>competing risks</em> setting, which can be described with the multi-state model in the figure below.</p>
+<pre class="r"><code>connect &lt;- matrix(0, nrow = 3, ncol = 3, 
+                  dimnames = lapply(1:2, \(i) c(&quot;MGUS&quot;, &quot;PCM&quot;, &quot;Death&quot;)))
+connect[1, 2:3] &lt;- 1
+statefig(c(1, 2), connect)</code></pre>
+<p><img src="multivar_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Suppose we are interested in the effect of the mspike variable on <strong>either pcm or death</strong>. We fit the following models</p>
+<pre class="r"><code>mgus2 &lt;- subset(mgus2, !is.na(mspike))
+
+mgcipcm &lt;- cumincglm(Surv(etime, event) ~ mspike, cause = &quot;pcm&quot;, time = 120, 
+                   data = mgus2)
+mgcideath &lt;- cumincglm(Surv(etime, event) ~ mspike, cause = &quot;death&quot;, time = 120, 
+                   data = mgus2)</code></pre>
+<p>which gives us two coefficients for <code>mspike</code>.</p>
+<div id="exercise" class="section level3 alert alert-warning">
+<h3 class="alert alert-warning">Exercise</h3>
+<p>Write a function to perform simultaneous inference on the two coefficients. That is, find a way to test the null hypothesis that both mspike coefficients (in the pcm model and the death model) are equal to 0.</p>
+<details>
+<summary>
+<strong>Solution 1</strong>
+</summary>
+<p>This solution involves stacking the estimating equations for both models, and the refitting with an indicator for the outcome type.</p>
+<pre class="r"><code>jointfit &lt;- function(fit1, fit2) {
+  
+  bform &lt;- update.formula(fit1$formula, .PO ~ .)
+  
+  dset1 &lt;- get_all_vars(bform[-2], fit1$data)
+  dset1$.PO &lt;- fit1$y
+  dset1$model &lt;- &quot;fit1&quot;
+  dset1$id &lt;- 1:nrow(dset1)
+  
+  dset2 &lt;- get_all_vars(bform[-2], fit2$data)
+  dset2$.PO &lt;- fit2$y
+  dset2$model &lt;- &quot;fit2&quot;
+  dset2$id &lt;- 1:nrow(dset2)
+  
+  dset &lt;- rbind(dset1, dset2)
+  
+  nform &lt;- update.formula(bform, ~ .:model + model - 1)
+  
+  geefit &lt;- geese(nform, data = dset[order(dset$id),], id = id)
+  
+  geefit
+  
+}
+
+jointm &lt;- jointfit(mgcipcm, mgcideath)
+
+
+mstat &lt;- c(t(jointm$beta[3:4]) %*% solve(jointm$vbeta[3:4, 3:4]) %*% jointm$beta[3:4])
+pchisq(mstat, df = 2, lower.tail = FALSE)</code></pre>
+<pre><code>## [1] 0.000235711</code></pre>
+</details>
+<details>
+<summary>
+<strong>Solution 2</strong>
+</summary>
+<p>This solution uses the bootstrap to estimate the covariance matrix of the two coefficients.</p>
+<pre class="r"><code>B &lt;- 2000
+beta.boot &lt;- matrix(NA, nrow = B, ncol = 2)
+
+for(j in 1:B){
+ 
+  mgus2.j &lt;- mgus2[sample(1:nrow(mgus2), nrow(mgus2), replace = TRUE),]
+  
+  mgcipcm.j &lt;- cumincglm(Surv(etime, event) ~ mspike, cause = &quot;pcm&quot;, time = 120, 
+                   data = mgus2.j)
+  mgcideath.j &lt;- cumincglm(Surv(etime, event) ~ mspike, cause = &quot;death&quot;, time = 120, 
+                   data = mgus2.j)
+  
+  beta.boot[j,] &lt;- c(mgcipcm.j$coefficients[2], mgcideath.j$coefficients[2])
+
+}
+
+mstat &lt;- c(mgcipcm$coefficients[2], mgcideath$coefficients[2]) %*% 
+  solve(cov(beta.boot)) %*% c(mgcipcm$coefficients[2], mgcideath$coefficients[2])
+pchisq(mstat, df = 2, lower.tail = FALSE)</code></pre>
+<pre><code>##              [,1]
+## [1,] 0.0002151841</code></pre>
+</details>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkpvaW50IG1vZGVsbGluZyBtdWx0aXBsZSBlbmRwb2ludHMiDQpvdXRwdXQ6DQogIGh0bWxfZG9jdW1lbnQ6DQogICAgY29kZV9mb2xkaW5nOiBzaG93DQpiaWJsaW9ncmFwaHk6IHJlZnMuYmliDQotLS0NCg0KDQojIyMgTGVhcm5pbmcgb2JqZWN0aXZlcyB7LmFsZXJ0IC5hbGVydC1zdWNjZXNzfQ0KDQpJbiB0aGlzIGxlc3NvbiB5b3Ugd2lsbCANCg0KMS4gV3JpdGUgYSBmdW5jdGlvbiB0byBwZXJmb3JtIHNpbXVsdGFuZW91cyBpbmZlcmVuY2UgZm9yIGNvdmFyaWF0ZSBlZmZlY3RzIG9uIG11bHRpcGxlIG91dGNvbWVzIGluIHRoZSBjb21wZXRpbmcgcmlza3Mgc2V0dGluZy4gDQoNCiMjIFNldHVwDQoNCkxpYnJhcnkgdGhlIGBzdXJ2aXZhbGAgcGFja2FnZSBhbmQgdGhlbiB0aGUgYGV2ZW50Z2xtYCBwYWNrYWdlLCBhbmQgdGhlbiB0aGUgYGdlZXBhY2tgIHBhY2thZ2UuIA0KDQoNCmBgYHtyfQ0KbGlicmFyeShzdXJ2aXZhbCkNCmxpYnJhcnkoZXZlbnRnbG0pDQpsaWJyYXJ5KGdlZXBhY2spDQpgYGANCg0KIyMgSm9pbnQgbW9kZWxzDQoNCkNvbnNpZGVyIGFnYWluIHRoZSBgbWd1czJgIGRhdGFzZXQuIFRoaXMgaXMgYSBjb21wZXRpbmcgcmlza3Mgc2V0dGluZywgd2l0aCB0aGUgdHdvIHBvc3NpYmxlIGNhdXNlcyBvZiBmYWlsdXJlIGRlYXRoIGFuZCBwY20uIA0KDQpgYGB7cn0NCmNyZml0IDwtIHN1cnZmaXQoU3VydihldGltZSwgZXZlbnQpIH4gc2V4LCBldmVudGdsbTo6bWd1czIpDQpzdW1tYXJ5KGNyZml0LCB0aW1lcyA9IDEyMCkNCnByaW50KGNyZml0LCBybWVhbiA9IDEyMCkNCnBsb3QoY3JmaXQsIGNvbD0xOjIsICBub3Bsb3Q9IiIsDQogICAgIGx0eT1jKDMsMywyLDIsMSwxKSwgbHdkPTIsIHhzY2FsZT0xMiwNCiAgICAgeGxhYj0iWWVhcnMgcG9zdCBkaWFnbm9zaXMiLCB5bGFiPSJQKHN0YXRlKSIpDQpsZWdlbmQoMjQwLCAuNjUsIGMoIkZlbWFsZSwgZGVhdGgiLCAiTWFsZSwgZGVhdGgiLCAibWFsaWduYW5jeSIsICIoczApIiksDQogICAgICAgbHR5PWMoMSwxLDIsMyksIGNvbD1jKDEsMiwxLDEpLCBidHk9J24nLCBsd2Q9MikNCmFibGluZSh2ID0gMTIwLCBsdHkgPSAyKQ0KYGBgDQoNClRoaXMgaXMgdGhlIF9jb21wZXRpbmcgcmlza3NfIHNldHRpbmcsIHdoaWNoIGNhbiBiZSBkZXNjcmliZWQgd2l0aCB0aGUgbXVsdGktc3RhdGUgbW9kZWwgaW4gdGhlIGZpZ3VyZSBiZWxvdy4gDQoNCmBgYHtyfQ0KY29ubmVjdCA8LSBtYXRyaXgoMCwgbnJvdyA9IDMsIG5jb2wgPSAzLCANCiAgICAgICAgICAgICAgICAgIGRpbW5hbWVzID0gbGFwcGx5KDE6MiwgXChpKSBjKCJNR1VTIiwgIlBDTSIsICJEZWF0aCIpKSkNCmNvbm5lY3RbMSwgMjozXSA8LSAxDQpzdGF0ZWZpZyhjKDEsIDIpLCBjb25uZWN0KQ0KYGBgDQoNCg0KU3VwcG9zZSB3ZSBhcmUgaW50ZXJlc3RlZCBpbiB0aGUgZWZmZWN0IG9mIHRoZSBtc3Bpa2UgdmFyaWFibGUgb24gX19laXRoZXIgcGNtIG9yIGRlYXRoX18uIFdlIGZpdCB0aGUgZm9sbG93aW5nIG1vZGVscw0KYGBge3J9DQptZ3VzMiA8LSBzdWJzZXQobWd1czIsICFpcy5uYShtc3Bpa2UpKQ0KDQptZ2NpcGNtIDwtIGN1bWluY2dsbShTdXJ2KGV0aW1lLCBldmVudCkgfiBtc3Bpa2UsIGNhdXNlID0gInBjbSIsIHRpbWUgPSAxMjAsIA0KICAgICAgICAgICAgICAgICAgIGRhdGEgPSBtZ3VzMikNCm1nY2lkZWF0aCA8LSBjdW1pbmNnbG0oU3VydihldGltZSwgZXZlbnQpIH4gbXNwaWtlLCBjYXVzZSA9ICJkZWF0aCIsIHRpbWUgPSAxMjAsIA0KICAgICAgICAgICAgICAgICAgIGRhdGEgPSBtZ3VzMikNCmBgYA0Kd2hpY2ggZ2l2ZXMgdXMgdHdvIGNvZWZmaWNpZW50cyBmb3IgYG1zcGlrZWAuIA0KDQoNCiMjIyBFeGVyY2lzZSB7LmFsZXJ0IC5hbGVydC13YXJuaW5nfQ0KDQpXcml0ZSBhIGZ1bmN0aW9uIHRvIHBlcmZvcm0gc2ltdWx0YW5lb3VzIGluZmVyZW5jZSBvbiB0aGUgdHdvIGNvZWZmaWNpZW50cy4gVGhhdCBpcywgZmluZCBhIHdheSB0byB0ZXN0IHRoZSBudWxsIGh5cG90aGVzaXMgdGhhdCBib3RoIG1zcGlrZSBjb2VmZmljaWVudHMgKGluIHRoZSBwY20gbW9kZWwgYW5kIHRoZSBkZWF0aCBtb2RlbCkgYXJlIGVxdWFsIHRvIDAuIA0KDQoNCjxkZXRhaWxzPg0KPHN1bW1hcnk+PHN0cm9uZz5Tb2x1dGlvbiAxPC9zdHJvbmc+PC9zdW1tYXJ5Pg0KDQpUaGlzIHNvbHV0aW9uIGludm9sdmVzIHN0YWNraW5nIHRoZSBlc3RpbWF0aW5nIGVxdWF0aW9ucyBmb3IgYm90aCBtb2RlbHMsIGFuZCB0aGUgcmVmaXR0aW5nIHdpdGggYW4gaW5kaWNhdG9yIGZvciB0aGUgb3V0Y29tZSB0eXBlLiANCg0KYGBge3J9DQpqb2ludGZpdCA8LSBmdW5jdGlvbihmaXQxLCBmaXQyKSB7DQogIA0KICBiZm9ybSA8LSB1cGRhdGUuZm9ybXVsYShmaXQxJGZvcm11bGEsIC5QTyB+IC4pDQogIA0KICBkc2V0MSA8LSBnZXRfYWxsX3ZhcnMoYmZvcm1bLTJdLCBmaXQxJGRhdGEpDQogIGRzZXQxJC5QTyA8LSBmaXQxJHkNCiAgZHNldDEkbW9kZWwgPC0gImZpdDEiDQogIGRzZXQxJGlkIDwtIDE6bnJvdyhkc2V0MSkNCiAgDQogIGRzZXQyIDwtIGdldF9hbGxfdmFycyhiZm9ybVstMl0sIGZpdDIkZGF0YSkNCiAgZHNldDIkLlBPIDwtIGZpdDIkeQ0KICBkc2V0MiRtb2RlbCA8LSAiZml0MiINCiAgZHNldDIkaWQgPC0gMTpucm93KGRzZXQyKQ0KICANCiAgZHNldCA8LSByYmluZChkc2V0MSwgZHNldDIpDQogIA0KICBuZm9ybSA8LSB1cGRhdGUuZm9ybXVsYShiZm9ybSwgfiAuOm1vZGVsICsgbW9kZWwgLSAxKQ0KICANCiAgZ2VlZml0IDwtIGdlZXNlKG5mb3JtLCBkYXRhID0gZHNldFtvcmRlcihkc2V0JGlkKSxdLCBpZCA9IGlkKQ0KICANCiAgZ2VlZml0DQogIA0KfQ0KDQpqb2ludG0gPC0gam9pbnRmaXQobWdjaXBjbSwgbWdjaWRlYXRoKQ0KDQoNCm1zdGF0IDwtIGModChqb2ludG0kYmV0YVszOjRdKSAlKiUgc29sdmUoam9pbnRtJHZiZXRhWzM6NCwgMzo0XSkgJSolIGpvaW50bSRiZXRhWzM6NF0pDQpwY2hpc3EobXN0YXQsIGRmID0gMiwgbG93ZXIudGFpbCA9IEZBTFNFKQ0KYGBgDQo8L2RldGFpbHM+DQoNCg0KPGRldGFpbHM+DQo8c3VtbWFyeT48c3Ryb25nPlNvbHV0aW9uIDI8L3N0cm9uZz48L3N1bW1hcnk+DQoNClRoaXMgc29sdXRpb24gdXNlcyB0aGUgYm9vdHN0cmFwIHRvIGVzdGltYXRlIHRoZSBjb3ZhcmlhbmNlIG1hdHJpeCBvZiB0aGUgdHdvIGNvZWZmaWNpZW50cy4gDQoNCmBgYHtyLCBjYWNoZT1UUlVFfQ0KQiA8LSAyMDAwDQpiZXRhLmJvb3QgPC0gbWF0cml4KE5BLCBucm93ID0gQiwgbmNvbCA9IDIpDQoNCmZvcihqIGluIDE6Qil7DQogDQogIG1ndXMyLmogPC0gbWd1czJbc2FtcGxlKDE6bnJvdyhtZ3VzMiksIG5yb3cobWd1czIpLCByZXBsYWNlID0gVFJVRSksXQ0KICANCiAgbWdjaXBjbS5qIDwtIGN1bWluY2dsbShTdXJ2KGV0aW1lLCBldmVudCkgfiBtc3Bpa2UsIGNhdXNlID0gInBjbSIsIHRpbWUgPSAxMjAsIA0KICAgICAgICAgICAgICAgICAgIGRhdGEgPSBtZ3VzMi5qKQ0KICBtZ2NpZGVhdGguaiA8LSBjdW1pbmNnbG0oU3VydihldGltZSwgZXZlbnQpIH4gbXNwaWtlLCBjYXVzZSA9ICJkZWF0aCIsIHRpbWUgPSAxMjAsIA0KICAgICAgICAgICAgICAgICAgIGRhdGEgPSBtZ3VzMi5qKQ0KICANCiAgYmV0YS5ib290W2osXSA8LSBjKG1nY2lwY20uaiRjb2VmZmljaWVudHNbMl0sIG1nY2lkZWF0aC5qJGNvZWZmaWNpZW50c1syXSkNCg0KfQ0KDQptc3RhdCA8LSBjKG1nY2lwY20kY29lZmZpY2llbnRzWzJdLCBtZ2NpZGVhdGgkY29lZmZpY2llbnRzWzJdKSAlKiUgDQogIHNvbHZlKGNvdihiZXRhLmJvb3QpKSAlKiUgYyhtZ2NpcGNtJGNvZWZmaWNpZW50c1syXSwgbWdjaWRlYXRoJGNvZWZmaWNpZW50c1syXSkNCnBjaGlzcShtc3RhdCwgZGYgPSAyLCBsb3dlci50YWlsID0gRkFMU0UpDQpgYGANCjwvZGV0YWlscz4NCg0KDQo=</div>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("multivar.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

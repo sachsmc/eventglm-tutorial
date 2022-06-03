@@ -1,0 +1,75 @@
+---
+title: "Overview and Setup"
+output:
+  html_document:
+    code_download: false
+---
+
+
+## Prerequisites
+
+- A computer
+- R at least version 2.1
+- R packages
+    - sandwich, geepack
+
+## Installation
+
+To get the most out of this tutorial, we recommend installing the development version of `eventglm`. Choose one of the following options: 
+
+
+### To install from the binaries on `r-universe` [Option 1]
+
+```{r, eval = FALSE, class.source="bg-success"}
+install.packages("eventglm", repos = c(
+  ropensci = 'https://sachsmc.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'))
+```
+
+
+### **If you are setup to compile R packages from source** [Option 2] 
+
+```{r, eval = FALSE, class.source = "bg-warning"}
+remotes::install_github("sachsmc/eventglm")
+```
+
+
+### Download and install the binary for your system [Option 3]
+
+- Windows: [insert link]
+- OSX: [insert link]
+
+
+### The stable version of the package can be installed from CRAN
+
+```{r, eval = FALSE, class.source= "bg-success"}
+install.packages("eventglm")
+```
+
+
+## The `eventglm` package
+
+The github page for `eventglm` is https://github.com/sachsmc/eventglm . Documentation and vignettes are available in R and at https://sachsmc.github.io/eventglm . 
+
+To cite eventglm in publications use:
+
+> Sachs MC, Gabriel EE (2022). “Event History Regression with Pseudo-Observations: Computational
+> Approaches and an Implementation in R.” _Journal of Statistical Software_, *102*(9), 1-34. doi:
+> 10.18637/jss.v102.i09 (URL: https://doi.org/10.18637/jss.v102.i09).
+
+A BibTeX entry for LaTeX users is
+
+```
+  @Article{,
+    title = {Event History Regression with Pseudo-Observations: Computational Approaches and an Implementation in {R}},
+    author = {Michael C. Sachs and Erin E. Gabriel},
+    journal = {Journal of Statistical Software},
+    year = {2022},
+    volume = {102},
+    number = {9},
+    pages = {1--34},
+    doi = {10.18637/jss.v102.i09},
+  }
+```
+
+

@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Multiple causes and times</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Using the `eventglm` R package for regression modeling of censored time-to-event outcomes</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lessons
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="basics.html">Lesson 1: Basics</a>
+    </li>
+    <li>
+      <a href="cmprisk.html">Lesson 2: Multiple causes and times</a>
+    </li>
+    <li>
+      <a href="censoring.html">Lesson 3: Censoring models</a>
+    </li>
+    <li>
+      <a href="multivar.html">Lesson 4: Multivariate outcome models</a>
+    </li>
+    <li>
+      <a href="extending.html">Lesson 5: Custom pseudo observation modules</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="biblio.html">References and resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Multiple causes and times</h1>
+
+</div>
+
+
+<div id="learning-objectives" class="section level3 alert alert-success">
+<h3 class="alert alert-success">Learning objectives</h3>
+<p>In this lesson you will</p>
+<ol style="list-style-type: decimal">
+<li>Fit and understand basic models for competing risks settings</li>
+<li>Fit and understand basic joint models for multiple time points of interest</li>
+<li>Compare and contrast the eventglm models with cloglog link to Cox regression models</li>
+</ol>
+</div>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<p>Library the <code>survival</code> package and then the <code>eventglm</code> package. We will use some commands from <code>survival</code> to make sense of what is going on in the regression models.</p>
+<pre class="r"><code>library(survival)
+library(eventglm)</code></pre>
+</div>
+<div id="monoclonal-gammopathy-data-competing-risks" class="section level2">
+<h2>Monoclonal gammopathy data (Competing risks)</h2>
+<p>Our next example involves the <code>mgus2</code> dataset, included in the package:</p>
+<pre class="r"><code>## ?mgus2
+head(mgus2)</code></pre>
+<pre><code>##   id age sex dxyr  hgb creat mspike ptime pstat futime death etime event
+## 1  1  88   F 1981 13.1   1.3    0.5    30     0     30     1    30 death
+## 2  2  78   F 1968 11.5   1.2    2.0    25     0     25     1    25 death
+## 3  3  94   M 1980 10.5   1.5    2.6    46     0     46     1    46 death
+## 4  4  68   M 1977 15.2   1.2    1.2    92     0     92     1    92 death
+## 5  5  90   F 1973 10.7   0.8    1.0     8     0      8     1     8 death
+## 6  6  90   M 1990 12.9   1.0    0.5     4     0      4     1     4 death</code></pre>
+<p>This dataset has a number of covariates, and the time until progression to plasma cell malignancy (PCM), or death. Here the event PCM is of primary interest, with death being a competing event. The data are described and analyzed in the survival vignette (section 2.3.2):</p>
+<pre class="r"><code>crfit &lt;- survfit(Surv(etime, event) ~ sex, eventglm::mgus2)
+summary(crfit, times = 120)</code></pre>
+<pre><code>## Call: survfit(formula = Surv(etime, event) ~ sex, data = eventglm::mgus2)
+## 
+##                 sex=F 
+##     time   n.risk  n.event  P((s0))   P(pcm) P(death) 
+## 120.0000 214.0000 331.0000   0.4456   0.0739   0.4805 
+## 
+##                 sex=M 
+##     time   n.risk  n.event  P((s0))   P(pcm) P(death) 
+## 120.0000 210.0000 450.0000   0.3695   0.0553   0.5752</code></pre>
+<pre class="r"><code>print(crfit, rmean = 120)</code></pre>
+<pre><code>## Call: survfit(formula = Surv(etime, event) ~ sex, data = eventglm::mgus2)
+## 
+##                n nevent    rmean*
+## sex=F, (s0)  631      0 82.983485
+## sex=M, (s0)  753      0 74.808346
+## sex=F, pcm   631     59  4.794595
+## sex=M, pcm   753     56  3.501305
+## sex=F, death 631    370 32.221921
+## sex=M, death 753    490 41.690349
+##    *mean time in state, restricted (max time = 120 )</code></pre>
+<pre class="r"><code>plot(crfit, col=1:2,  noplot=&quot;&quot;,
+     lty=c(3,3,2,2,1,1), lwd=2, xscale=12,
+     xlab=&quot;Years post diagnosis&quot;, ylab=&quot;P(state)&quot;)
+legend(240, .65, c(&quot;Female, death&quot;, &quot;Male, death&quot;, &quot;malignancy&quot;, &quot;(s0)&quot;),
+       lty=c(1,1,2,3), col=c(1,2,1,1), bty=&#39;n&#39;, lwd=2)
+abline(v = 120, lty = 2)</code></pre>
+<p><img src="cmprisk_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>This is the <em>competing risks</em> setting, which can be described with the multi-state model in the figure below.</p>
+<pre class="r"><code>connect &lt;- matrix(0, nrow = 3, ncol = 3, 
+                  dimnames = lapply(1:2, \(i) c(&quot;MGUS&quot;, &quot;PCM&quot;, &quot;Death&quot;)))
+connect[1, 2:3] &lt;- 1
+statefig(c(1, 2), connect)</code></pre>
+<p><img src="cmprisk_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>We can get similar estimates for the cumulative incidence of pcm at 10 years and the expected lifetime lost due to pcm up to 10 years with similar commands as above. Note the <code>cause</code> option to specify the cause of interest.</p>
+<pre class="r"><code>mgfitci &lt;- cumincglm(Surv(etime, event) ~ sex, cause = &quot;pcm&quot;, 
+                     time = 120, data = mgus2)
+summary(mgfitci)</code></pre>
+<pre><code>## 
+## Call:
+## cumincglm(formula = Surv(etime, event) ~ sex, time = 120, cause = &quot;pcm&quot;, 
+##     data = mgus2)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -0.08163  -0.07447  -0.06306  -0.05536   1.23923  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  0.07383    0.01086   6.800 1.04e-11 ***
+## sexM        -0.01857    0.01384  -1.342     0.18    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for quasi family taken to be 1)
+## 
+##     Null deviance: 88.507  on 1383  degrees of freedom
+## Residual deviance: 88.388  on 1382  degrees of freedom
+## AIC: NA
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<pre class="r"><code>mgfitrmean &lt;- rmeanglm(Surv(etime, event) ~ sex, cause = &quot;pcm&quot;, 
+                       time = 120, data = mgus2)
+summary(mgfitrmean)</code></pre>
+<pre><code>## 
+## Call:
+## rmeanglm(formula = Surv(etime, event) ~ sex, time = 120, cause = &quot;pcm&quot;, 
+##     data = mgus2)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+##  -4.971   -4.863   -3.678   -3.508  113.292  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   4.7926     0.7883   6.080  1.2e-09 ***
+## sexM         -1.2929     0.9902  -1.306    0.192    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for quasi family taken to be 1)
+## 
+##     Null deviance: 450225  on 1383  degrees of freedom
+## Residual deviance: 449652  on 1382  degrees of freedom
+## AIC: NA
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<p>This time the models are <span class="math display">\[
+P(T \leq 120 \mbox{ and } \delta = \mbox{PCM} | \mbox{sex}) = \beta_0 + \beta_1 I(sex = &quot;M&quot;)
+\]</span> for the cause specific cumulative incidence, and <span class="math display">\[
+E((120 - T \wedge 120)I(\delta = \mbox{PCM}) | \mbox{sex}) = \beta_0 + \beta_1 I(sex = &quot;M&quot;)
+\]</span> for the second model. The latter is interpreted as the <em>expected lifetime lost due to PCM up to 120 months</em>. See <span class="citation">Andersen (2013)</span> for more details on this quantity.</p>
+<div id="exercise" class="section level3 alert alert-warning">
+<h3 class="alert alert-warning">Exercise</h3>
+<p>Look at the mgus2 dataset, summarize the variables in the data, and read the help file for mgus2 in the eventglm documentation. Then specify and fit a regression model to answer a particular scientific question for this dataset. Interpret the relevant coefficients from the model.</p>
+<details>
+<summary>
+<strong>Solution</strong>
+</summary>
+<pre class="r"><code>summary(mgus2)</code></pre>
+<pre><code>##        id              age        sex          dxyr           hgb      
+##  Min.   :   1.0   Min.   :24.00   F:631   Min.   :1960   Min.   : 5.7  
+##  1st Qu.: 346.8   1st Qu.:63.00   M:753   1st Qu.:1980   1st Qu.:12.2  
+##  Median : 692.5   Median :72.00           Median :1984   Median :13.5  
+##  Mean   : 692.5   Mean   :70.42           Mean   :1983   Mean   :13.3  
+##  3rd Qu.:1038.2   3rd Qu.:79.00           3rd Qu.:1988   3rd Qu.:14.7  
+##  Max.   :1384.0   Max.   :96.00           Max.   :1994   Max.   :18.9  
+##                                                          NA&#39;s   :13    
+##      creat            mspike          ptime            pstat        
+##  Min.   : 0.400   Min.   :0.000   Min.   :  1.00   Min.   :0.00000  
+##  1st Qu.: 0.900   1st Qu.:0.600   1st Qu.: 37.00   1st Qu.:0.00000  
+##  Median : 1.100   Median :1.200   Median : 81.00   Median :0.00000  
+##  Mean   : 1.292   Mean   :1.164   Mean   : 93.54   Mean   :0.08309  
+##  3rd Qu.: 1.300   3rd Qu.:1.500   3rd Qu.:136.25   3rd Qu.:0.00000  
+##  Max.   :22.000   Max.   :3.000   Max.   :424.00   Max.   :1.00000  
+##  NA&#39;s   :30       NA&#39;s   :11                                        
+##      futime          death            etime           event    
+##  Min.   :  1.0   Min.   :0.0000   Min.   :  1.00   censor:409  
+##  1st Qu.: 40.0   1st Qu.:0.0000   1st Qu.: 37.00   pcm   :115  
+##  Median : 84.0   Median :1.0000   Median : 81.00   death :860  
+##  Mean   : 95.8   Mean   :0.6958   Mean   : 93.54               
+##  3rd Qu.:139.0   3rd Qu.:1.0000   3rd Qu.:136.25               
+##  Max.   :424.0   Max.   :1.0000   Max.   :424.00               
+## </code></pre>
+<p>The purpose of this study was to determine whether there are any reliable predictors of progression to malignancy.</p>
+<pre class="r"><code>mgfitci2 &lt;- cumincglm(Surv(etime, event) ~ sex + age + hgb + creat + mspike, 
+                      cause = &quot;pcm&quot;, 
+                      time = 120, data = mgus2)
+summary(mgfitci2)</code></pre>
+<pre><code>## 
+## Call:
+## cumincglm(formula = Surv(etime, event) ~ sex + age + hgb + creat + 
+##     mspike, time = 120, cause = &quot;pcm&quot;, data = mgus2)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -0.18803  -0.08596  -0.06097  -0.03109   1.19792  
+## 
+## Coefficients:
+##               Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  3.930e-02  6.295e-02   0.624  0.53238    
+## sexM        -1.443e-02  1.417e-02  -1.019  0.30841    
+## age         -3.672e-05  4.500e-04  -0.082  0.93496    
+## hgb         -1.554e-03  3.516e-03  -0.442  0.65840    
+## creat       -7.625e-03  2.878e-03  -2.649  0.00807 ** 
+## mspike       5.685e-02  1.427e-02   3.983 6.81e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for quasi family taken to be 1)
+## 
+##     Null deviance: 86.385  on 1337  degrees of freedom
+## Residual deviance: 84.738  on 1332  degrees of freedom
+##   (46 observations deleted due to missingness)
+## AIC: NA
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<pre class="r"><code>mgfitrmean2 &lt;- rmeanglm(Surv(etime, event) ~ sex + age + hgb + creat + mspike, 
+                        cause = &quot;pcm&quot;, 
+                      time = 120, data = mgus2)
+summary(mgfitrmean2)</code></pre>
+<pre><code>## 
+## Call:
+## rmeanglm(formula = Surv(etime, event) ~ sex + age + hgb + creat + 
+##     mspike, time = 120, cause = &quot;pcm&quot;, data = mgus2)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -13.738   -5.580   -3.688   -1.748  111.199  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  1.40587    4.45719   0.315 0.752446    
+## sexM        -0.87102    0.99635  -0.874 0.382005    
+## age          0.03851    0.03034   1.269 0.204405    
+## hgb         -0.27601    0.27655  -0.998 0.318256    
+## creat       -0.41408    0.21143  -1.958 0.050176 .  
+## mspike       4.03216    1.10280   3.656 0.000256 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for quasi family taken to be 1)
+## 
+##     Null deviance: 438200  on 1337  degrees of freedom
+## Residual deviance: 429463  on 1332  degrees of freedom
+##   (46 observations deleted due to missingness)
+## AIC: NA
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<p>The size of the monoclonal serum spike appears to be an independent predictor of the risk of pcm within 10 years, with a 5.7% higher risk for each unit increase in mspike, adjusted for creatinine, hemoglobin, age and sex. Likewise, a unit increase in mspike is associated with an expected 4 months lifetime lost due to PCM, adjusted for the other variables.</p>
+<p>The objects returned by <code>cumincglm</code> and <code>rmeanglm</code> inherit from <code>glm</code>, so many methods are available, including <code>predict</code> and <code>resid</code>. Residuals use the scaling factor suggested by <span class="citation">Perme and Andersen (2008)</span>, as do predictions. Predicted restricted means give a possible method to predict individual event times, while the predicted cumulative incidence should be probabilities. Note that with the identity link, the predicted cumulative incidence is not guaranteed to be between 0 and 1.</p>
+<pre class="r"><code>hist(predict(mgfitrmean2, newdata = mgus2), 
+     xlab = &quot;Predicted lifetime lost due to PCM&quot;, main = &quot;&quot;)</code></pre>
+<p><img src="cmprisk_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>mgus2$prob.pcm10 &lt;- predict(mgfitci2, newdata = mgus2)
+mgus2$pseudo.ci &lt;- mgfitci$y
+summary(mgus2$prob.pcm10)</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max.     NA&#39;s 
+## -0.09178  0.03774  0.06411  0.06423  0.08706  0.18443       46</code></pre>
+<pre class="r"><code>cutps &lt;- quantile(mgus2$prob.pcm10, seq(.1, .9, by = .1), na.rm = TRUE)
+mgus2$prob.cut &lt;- cut(mgus2$prob.pcm10, 
+                      cutps)
+pred.p &lt;- cutps[-length(cutps)] + diff(cutps)
+obs.p &lt;- c(by(mgus2$pseudo.ci, mgus2$prob.cut, mean))
+plot(obs.p ~ pred.p, xlab = &quot;predicted 10 year risk&quot;, ylab = &quot;observed 10 year risk&quot;)
+abline(0, 1)</code></pre>
+<img src="cmprisk_files/figure-html/unnamed-chunk-8-2.png" width="672" />
+</details>
+</div>
+</div>
+<div id="joint-modelling-over-multiple-times" class="section level2">
+<h2>Joint modelling over multiple times</h2>
+<p>You can specify a vector of times in <code>cumincglm</code> to get a model that assumes the effect of the covariate is constant over those times. Let’s see how this works in the <code>colon</code> example.</p>
+<pre class="r"><code>mvtfit1 &lt;- cumincglm(Surv(time, status) ~ rx, 
+        time = c(500, 1000, 1500, 2000, 2500),
+        data = colon, survival = TRUE)
+summary(mvtfit1)</code></pre>
+<pre><code>## 
+## Call:
+## cumincglm(formula = Surv(time, status) ~ rx, time = c(500, 1000, 
+##     1500, 2000, 2500), data = colon, survival = TRUE)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+##                                         
+## 
+## Coefficients:
+##                          Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)              0.829127   0.021793  38.046  &lt; 2e-16 ***
+## factor(pseudo.time)1000 -0.170283   0.012340 -13.800  &lt; 2e-16 ***
+## factor(pseudo.time)1500 -0.263039   0.014456 -18.196  &lt; 2e-16 ***
+## factor(pseudo.time)2000 -0.314852   0.015290 -20.592  &lt; 2e-16 ***
+## factor(pseudo.time)2500 -0.351750   0.016423 -21.419  &lt; 2e-16 ***
+## rxLev                    0.003942   0.032530   0.121  0.90355    
+## rxLev+5FU                0.093737   0.031979   2.931  0.00338 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for quasi family taken to be 1)
+## 
+##     Null deviance: 1091.5  on 4644  degrees of freedom
+## Residual deviance: 1009.4  on 4638  degrees of freedom
+## AIC: NA
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<p>This fits the model (in general terms) <span class="math display">\[g\{P(T_i &lt; t_b| X_i = x_i)\} = (\beta_0 + \beta_b) + \beta_1x_i, b = 1, \ldots, k.\]</span></p>
+<p>In this model, the intercept is the survival probability in the Obs arm at time 500 (the reference time). The terms labeled <code>factor(pseudo.time)t</code> represent the change in the intercept associated with the time <code>t</code>. So, for example, the survival probability in the Obs arm at time 1000 is 0.83 + -0.17 = 0.66.</p>
+<p>Looking at the survival curves in previous lesson, the assumption of a constant treatment effect on the survival difference scale may be questionable. We can allow covariate effects to be time dependent by wrapping them in the special term <code>tve()</code> in the right side of the formula.</p>
+<pre class="r"><code>mvtfit2 &lt;- cumincglm(Surv(time, status) ~ tve(rx), 
+        time = c(500, 1000, 1500, 2000, 2500),
+        data = colon, survival = TRUE)
+summary(mvtfit2)</code></pre>
+<pre><code>## 
+## Call:
+## cumincglm(formula = Surv(time, status) ~ tve(rx), time = c(500, 
+##     1000, 1500, 2000, 2500), data = colon, survival = TRUE)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+##                                         
+## 
+## Coefficients:
+##                                    Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)                        0.850710   0.020078  42.370  &lt; 2e-16 ***
+## factor(pseudo.time)1000           -0.178401   0.021560  -8.275  &lt; 2e-16 ***
+## factor(pseudo.time)1500           -0.289898   0.025561 -11.341  &lt; 2e-16 ***
+## factor(pseudo.time)2000           -0.345379   0.026875 -12.851  &lt; 2e-16 ***
+## factor(pseudo.time)2500           -0.394161   0.028857 -13.659  &lt; 2e-16 ***
+## factor(pseudo.time)500:rxLev       0.004138   0.028347   0.146  0.88395    
+## factor(pseudo.time)1000:rxLev     -0.017500   0.037805  -0.463  0.64343    
+## factor(pseudo.time)1500:rxLev     -0.002754   0.039739  -0.069  0.94474    
+## factor(pseudo.time)2000:rxLev      0.006751   0.040132   0.168  0.86641    
+## factor(pseudo.time)2500:rxLev      0.029075   0.041596   0.699  0.48456    
+## factor(pseudo.time)500:rxLev+5FU   0.027581   0.027476   1.004  0.31546    
+## factor(pseudo.time)1000:rxLev+5FU  0.074455   0.036360   2.048  0.04059 *  
+## factor(pseudo.time)1500:rxLev+5FU  0.116689   0.038753   3.011  0.00260 ** 
+## factor(pseudo.time)2000:rxLev+5FU  0.118203   0.039667   2.980  0.00288 ** 
+## factor(pseudo.time)2500:rxLev+5FU  0.131758   0.041722   3.158  0.00159 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for quasi family taken to be 1)
+## 
+##     Null deviance: 1091.5  on 4644  degrees of freedom
+## Residual deviance: 1007.9  on 4630  degrees of freedom
+## AIC: NA
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<p>This fits the model</p>
+<p><span class="math display">\[g\{P(T_i &lt; t_b| X_i = x_i)\} = (\beta_0 + \beta_b) + \gamma_b x_i, b = 1, \ldots, k\]</span></p>
+<p>Now the coefficients labeled <code>factor(pseudo.time)t:Covariate</code> represent the covariate effect at time <code>t</code>. So, for example, the difference in survival probabilities of Levamisole plus 5-FU to Observation at time 1500 is</p>
+<pre class="r"><code>round(summary(mvtfit2)$coefficients[13,, drop = FALSE],2)</code></pre>
+<pre><code>##                                   Estimate Std. Error z value Pr(&gt;|z|)
+## factor(pseudo.time)1500:rxLev+5FU     0.12       0.04    3.01        0</code></pre>
+<p>Compare with the estimate from survfit:</p>
+<pre class="r"><code>sfit &lt;- survfit(Surv(time, status) ~ rx, data = colon)
+round(summary(sfit, times = 1500)$surv[3] - 
+  summary(sfit, times = 1500)$surv[1], 2)</code></pre>
+<pre><code>## [1] 0.12</code></pre>
+<p>The key advantage of the regression approach is that we can adjust for covariates, do inference directly, and have more flexible models. The <code>tve</code> term allows you to have a mix of time-varying and time-constant effects. Just apply it to any covariate that you want to be time-varying.</p>
+<div id="exercise-1" class="section level3 alert alert-warning">
+<h3 class="alert alert-warning">Exercise</h3>
+<p>In the <code>mvtfit2</code> model, construct a procedure to test the null hypothesis that there is no difference in survival comparing Lev+5FU to the Obs group <em>at any of the 5 times</em> in the model.</p>
+<details>
+<summary>
+<strong>Solution</strong>
+</summary>
+<p>The null hypothesis is that the 5 coefficients with the label <code>rxLev+5FU</code> are simultaneously equal to 0. We can test this by doing a Wald test manually using the estimated covariance matrix of the estimated coefficients:</p>
+<pre class="r"><code>tdex &lt;- grep(&quot;rxLev+5FU&quot;, names(coef(mvtfit2)), fixed = TRUE)
+
+Wstat &lt;- c(t(coef(mvtfit2)[tdex]) %*% 
+             solve(vcov(mvtfit2)[tdex, tdex]) %*% 
+             coef(mvtfit2)[tdex])
+## under the null this is Chisq with 5 degrees of freedom
+pchisq(Wstat, df = length(tdex), lower.tail = FALSE)</code></pre>
+<pre><code>## [1] 0.04408651</code></pre>
+</details>
+</div>
+<div id="relationship-to-the-cox-model" class="section level3">
+<h3>Relationship to the Cox model</h3>
+<p>The <code>cloglog</code> link function stands for “complementary log-log,” and is defined <span class="math inline">\(g(x) = \log(-\log(1 - x))\)</span>. Hence a model for the cumulative incidence with the cloglog link is <span class="math display">\[
+\log( -\log(1 - P(T \leq t | X))) = \beta_0 + \beta_1 X. 
+\]</span> Recall that the cumulative hazard <span class="math inline">\(H(t)\)</span> is related to the survival: <span class="math inline">\(S(t) = \exp(-H(t))\)</span>, so inverting this relationship we get from our model <span class="math display">\[
+\log(H(t | X)) = \beta_0 + \beta_1 X.
+\]</span></p>
+<p>If a proportional hazards Cox model holds then <span class="math display">\[
+S(t | X) = \exp(- H_0(t) \exp(\gamma X))
+\]</span> where <span class="math inline">\(H_0(t) = H(t | X = 0)\)</span>, or equivalently <span class="math display">\[
+\log(-\log(S(t | X))) = \log(H_0(t)) + \gamma X.
+\]</span></p>
+<p>Thus fitting a <code>cumincglm</code> model should give us similar results as a Cox model. Let’s try it on the colon dataset.</p>
+<pre class="r"><code>## dummy variable for the treatment group
+colon$rxLev5FU &lt;- 1.0 * (colon$rx == &quot;Lev+5FU&quot;)
+
+colon.cll &lt;- cumincglm(Surv(time, status) ~ rxLev5FU, data = colon, 
+                       time = 1500, link = &quot;cloglog&quot;)
+summary(colon.cll)</code></pre>
+<pre><code>## 
+## Call:
+## cumincglm(formula = Surv(time, status) ~ rxLev5FU, time = 1500, 
+##     link = &quot;cloglog&quot;, data = colon)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -0.4411  -0.4411  -0.3230   0.5603   0.6835  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -0.54333    0.06124  -8.872  &lt; 2e-16 ***
+## rxLev5FU    -0.39996    0.11903  -3.360 0.000779 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for quasi family taken to be 1)
+## 
+##     Null deviance: 223.60  on 928  degrees of freedom
+## Residual deviance: 220.75  on 927  degrees of freedom
+## AIC: NA
+## 
+## Number of Fisher Scoring iterations: 3</code></pre>
+<pre class="r"><code>colon.cox &lt;- coxph(Surv(time, status) ~ rxLev5FU, data = colon)
+summary(colon.cox)</code></pre>
+<pre><code>## Call:
+## coxph(formula = Surv(time, status) ~ rxLev5FU, data = colon)
+## 
+##   n= 929, number of events= 452 
+## 
+##             coef exp(coef) se(coef)     z Pr(&gt;|z|)    
+## rxLev5FU -0.3586    0.6987   0.1058 -3.39 0.000698 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+##          exp(coef) exp(-coef) lower .95 upper .95
+## rxLev5FU    0.6987      1.431    0.5679    0.8596
+## 
+## Concordance= 0.536  (se = 0.011 )
+## Likelihood ratio test= 12.09  on 1 df,   p=5e-04
+## Wald test            = 11.49  on 1 df,   p=7e-04
+## Score (logrank) test = 11.62  on 1 df,   p=7e-04</code></pre>
+<p>The coefficients are similar, but not that close comparing the two model results.</p>
+<div id="stop-and-think" class="section level4 alert alert-info">
+<h4 class="alert alert-info">Stop and think</h4>
+<p>How are the modeling assumptions different between the two models in the previous code chunk? How can we modify the cumincglm model to get estimates closer to the Cox model?</p>
+<details>
+<summary>
+<strong>Solution</strong>
+</summary>
+<p>The key difference is that the cumincglm model is assuming proportional hazards, but <strong>only at one time point</strong> (1500). We can modify this to a multiple time point model, where we do <em>not</em> want the coefficient to vary in time. If we do allow the coefficient for Lev+5FU to vary in time, then we would get something similar to a Cox model with time varying coefficients.</p>
+<pre class="r"><code>colon.cll2 &lt;- cumincglm(Surv(time, status) ~ rxLev5FU, data = colon, 
+                       time = c(500, 1000, 1500, 2000, 2500), link = &quot;cloglog&quot;)
+summary(colon.cll2)</code></pre>
+<pre><code>## 
+## Call:
+## cumincglm(formula = Surv(time, status) ~ rxLev5FU, time = c(500, 
+##     1000, 1500, 2000, 2500), link = &quot;cloglog&quot;, data = colon)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -0.5737  -0.3795  -0.1519   0.5096   2.1118  
+## 
+## Coefficients:
+##                         Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)             -1.80376    0.09244 -19.513  &lt; 2e-16 ***
+## factor(pseudo.time)1000  0.91633    0.07191  12.742  &lt; 2e-16 ***
+## factor(pseudo.time)1500  1.24968    0.07862  15.895  &lt; 2e-16 ***
+## factor(pseudo.time)2000  1.41171    0.08106  17.415  &lt; 2e-16 ***
+## factor(pseudo.time)2500  1.52184    0.08362  18.200  &lt; 2e-16 ***
+## rxLev5FU                -0.35686    0.10823  -3.297 0.000977 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for quasi family taken to be 1)
+## 
+##     Null deviance: 1091.5  on 4644  degrees of freedom
+## Residual deviance: 1008.2  on 4639  degrees of freedom
+## AIC: NA
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre class="r"><code>summary(colon.cox)</code></pre>
+<pre><code>## Call:
+## coxph(formula = Surv(time, status) ~ rxLev5FU, data = colon)
+## 
+##   n= 929, number of events= 452 
+## 
+##             coef exp(coef) se(coef)     z Pr(&gt;|z|)    
+## rxLev5FU -0.3586    0.6987   0.1058 -3.39 0.000698 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+##          exp(coef) exp(-coef) lower .95 upper .95
+## rxLev5FU    0.6987      1.431    0.5679    0.8596
+## 
+## Concordance= 0.536  (se = 0.011 )
+## Likelihood ratio test= 12.09  on 1 df,   p=5e-04
+## Wald test            = 11.49  on 1 df,   p=7e-04
+## Score (logrank) test = 11.62  on 1 df,   p=7e-04</code></pre>
+<pre class="r"><code>coef(colon.cll2)[6]</code></pre>
+<pre><code>##   rxLev5FU 
+## -0.3568569</code></pre>
+<pre class="r"><code>coef(colon.cox)</code></pre>
+<pre><code>##   rxLev5FU 
+## -0.3585821</code></pre>
+</details>
+</div>
+</div>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2 class="unnumbered">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-andersen2013decomposition" class="csl-entry">
+Andersen, Per Kragh. 2013. <span>“Decomposition of Number of Life Years Lost According to Causes of Death.”</span> <em>Statistics in Medicine</em> 32 (30): 5278–85.
+</div>
+<div id="ref-perme2008checking" class="csl-entry">
+Perme, Maja Pohar, and Per Kragh Andersen. 2008. <span>“Checking Hazard Regression Models Using Pseudo-Observations.”</span> <em>Statistics in Medicine</em> 27 (25): 5309–28.
+</div>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIk11bHRpcGxlIGNhdXNlcyBhbmQgdGltZXMiDQpvdXRwdXQ6DQogIGh0bWxfZG9jdW1lbnQ6DQogICAgY29kZV9mb2xkaW5nOiBzaG93DQpiaWJsaW9ncmFwaHk6IHJlZnMuYmliDQotLS0NCg0KIyMjIExlYXJuaW5nIG9iamVjdGl2ZXMgey5hbGVydCAuYWxlcnQtc3VjY2Vzc30NCg0KSW4gdGhpcyBsZXNzb24geW91IHdpbGwgDQoNCjEuIEZpdCBhbmQgdW5kZXJzdGFuZCBiYXNpYyBtb2RlbHMgZm9yIGNvbXBldGluZyByaXNrcyBzZXR0aW5ncw0KMi4gRml0IGFuZCB1bmRlcnN0YW5kIGJhc2ljIGpvaW50IG1vZGVscyBmb3IgbXVsdGlwbGUgdGltZSBwb2ludHMgb2YgaW50ZXJlc3QNCjMuIENvbXBhcmUgYW5kIGNvbnRyYXN0IHRoZSBldmVudGdsbSBtb2RlbHMgd2l0aCBjbG9nbG9nIGxpbmsgdG8gQ294IHJlZ3Jlc3Npb24gbW9kZWxzDQoNCiMjIFNldHVwDQoNCkxpYnJhcnkgdGhlIGBzdXJ2aXZhbGAgcGFja2FnZSBhbmQgdGhlbiB0aGUgYGV2ZW50Z2xtYCBwYWNrYWdlLiBXZSB3aWxsIHVzZSBzb21lIGNvbW1hbmRzIGZyb20gYHN1cnZpdmFsYCB0byBtYWtlIHNlbnNlIG9mIHdoYXQgaXMgZ29pbmcgb24gaW4gdGhlIHJlZ3Jlc3Npb24gbW9kZWxzLg0KDQoNCmBgYHtyfQ0KbGlicmFyeShzdXJ2aXZhbCkNCmxpYnJhcnkoZXZlbnRnbG0pDQpgYGANCg0KIyMgTW9ub2Nsb25hbCBnYW1tb3BhdGh5IGRhdGEgKENvbXBldGluZyByaXNrcykNCg0KT3VyIG5leHQgZXhhbXBsZSBpbnZvbHZlcyB0aGUgYG1ndXMyYCBkYXRhc2V0LCBpbmNsdWRlZCBpbiB0aGUgcGFja2FnZTogDQoNCmBgYHtyLCBldmFsID0gMn0NCj9tZ3VzMg0KaGVhZChtZ3VzMikNCmBgYA0KDQpUaGlzIGRhdGFzZXQgaGFzIGEgbnVtYmVyIG9mIGNvdmFyaWF0ZXMsIGFuZCB0aGUgdGltZSB1bnRpbCBwcm9ncmVzc2lvbiB0byBwbGFzbWEgY2VsbCBtYWxpZ25hbmN5IChQQ00pLCBvciBkZWF0aC4gSGVyZSB0aGUgZXZlbnQgUENNIGlzIG9mIHByaW1hcnkgaW50ZXJlc3QsIHdpdGggZGVhdGggYmVpbmcgYSBjb21wZXRpbmcgZXZlbnQuIFRoZSBkYXRhIGFyZSBkZXNjcmliZWQgYW5kIGFuYWx5emVkIGluIHRoZSBzdXJ2aXZhbCB2aWduZXR0ZSAoc2VjdGlvbiAyLjMuMik6IA0KDQpgYGB7cn0NCmNyZml0IDwtIHN1cnZmaXQoU3VydihldGltZSwgZXZlbnQpIH4gc2V4LCBldmVudGdsbTo6bWd1czIpDQpzdW1tYXJ5KGNyZml0LCB0aW1lcyA9IDEyMCkNCnByaW50KGNyZml0LCBybWVhbiA9IDEyMCkNCnBsb3QoY3JmaXQsIGNvbD0xOjIsICBub3Bsb3Q9IiIsDQogICAgIGx0eT1jKDMsMywyLDIsMSwxKSwgbHdkPTIsIHhzY2FsZT0xMiwNCiAgICAgeGxhYj0iWWVhcnMgcG9zdCBkaWFnbm9zaXMiLCB5bGFiPSJQKHN0YXRlKSIpDQpsZWdlbmQoMjQwLCAuNjUsIGMoIkZlbWFsZSwgZGVhdGgiLCAiTWFsZSwgZGVhdGgiLCAibWFsaWduYW5jeSIsICIoczApIiksDQogICAgICAgbHR5PWMoMSwxLDIsMyksIGNvbD1jKDEsMiwxLDEpLCBidHk9J24nLCBsd2Q9MikNCmFibGluZSh2ID0gMTIwLCBsdHkgPSAyKQ0KYGBgDQoNClRoaXMgaXMgdGhlIF9jb21wZXRpbmcgcmlza3NfIHNldHRpbmcsIHdoaWNoIGNhbiBiZSBkZXNjcmliZWQgd2l0aCB0aGUgbXVsdGktc3RhdGUgbW9kZWwgaW4gdGhlIGZpZ3VyZSBiZWxvdy4gDQoNCmBgYHtyfQ0KY29ubmVjdCA8LSBtYXRyaXgoMCwgbnJvdyA9IDMsIG5jb2wgPSAzLCANCiAgICAgICAgICAgICAgICAgIGRpbW5hbWVzID0gbGFwcGx5KDE6MiwgXChpKSBjKCJNR1VTIiwgIlBDTSIsICJEZWF0aCIpKSkNCmNvbm5lY3RbMSwgMjozXSA8LSAxDQpzdGF0ZWZpZyhjKDEsIDIpLCBjb25uZWN0KQ0KYGBgDQoNCg0KV2UgY2FuIGdldCBzaW1pbGFyIGVzdGltYXRlcyBmb3IgdGhlIGN1bXVsYXRpdmUgaW5jaWRlbmNlIG9mIHBjbSBhdCAxMCB5ZWFycyBhbmQgdGhlIGV4cGVjdGVkIGxpZmV0aW1lIGxvc3QgZHVlIHRvIHBjbSB1cCB0byAxMCB5ZWFycyB3aXRoIHNpbWlsYXIgY29tbWFuZHMgYXMgYWJvdmUuIE5vdGUgdGhlIGBjYXVzZWAgb3B0aW9uIHRvIHNwZWNpZnkgdGhlIGNhdXNlIG9mIGludGVyZXN0Lg0KDQpgYGB7cn0NCm1nZml0Y2kgPC0gY3VtaW5jZ2xtKFN1cnYoZXRpbWUsIGV2ZW50KSB+IHNleCwgY2F1c2UgPSAicGNtIiwgDQogICAgICAgICAgICAgICAgICAgICB0aW1lID0gMTIwLCBkYXRhID0gbWd1czIpDQpzdW1tYXJ5KG1nZml0Y2kpDQptZ2ZpdHJtZWFuIDwtIHJtZWFuZ2xtKFN1cnYoZXRpbWUsIGV2ZW50KSB+IHNleCwgY2F1c2UgPSAicGNtIiwgDQogICAgICAgICAgICAgICAgICAgICAgIHRpbWUgPSAxMjAsIGRhdGEgPSBtZ3VzMikNCnN1bW1hcnkobWdmaXRybWVhbikNCmBgYA0KDQpUaGlzIHRpbWUgdGhlIG1vZGVscyBhcmUgDQpcWw0KUChUIFxsZXEgMTIwIFxtYm94eyBhbmQgfSBcZGVsdGEgPSBcbWJveHtQQ019IHwgXG1ib3h7c2V4fSkgPSBcYmV0YV8wICsgXGJldGFfMSBJKHNleCA9ICJNIikNClxdIA0KZm9yIHRoZSBjYXVzZSBzcGVjaWZpYyBjdW11bGF0aXZlIGluY2lkZW5jZSwgYW5kIA0KXFsNCkUoKDEyMCAtIFQgXHdlZGdlIDEyMClJKFxkZWx0YSA9IFxtYm94e1BDTX0pIHwgXG1ib3h7c2V4fSkgPSBcYmV0YV8wICsgXGJldGFfMSBJKHNleCA9ICJNIikNClxdIA0KZm9yIHRoZSBzZWNvbmQgbW9kZWwuIFRoZSBsYXR0ZXIgaXMgaW50ZXJwcmV0ZWQgYXMgdGhlIF9leHBlY3RlZCBsaWZldGltZSBsb3N0IGR1ZSB0byBQQ00gdXAgdG8gMTIwIG1vbnRoc18uIFNlZSBAYW5kZXJzZW4yMDEzZGVjb21wb3NpdGlvbiBmb3IgbW9yZSBkZXRhaWxzIG9uIHRoaXMgcXVhbnRpdHkuIA0KDQoNCg0KIyMjIEV4ZXJjaXNlIHsuYWxlcnQgLmFsZXJ0LXdhcm5pbmd9DQoNCkxvb2sgYXQgdGhlIG1ndXMyIGRhdGFzZXQsIHN1bW1hcml6ZSB0aGUgdmFyaWFibGVzIGluIHRoZSBkYXRhLCBhbmQgcmVhZCB0aGUgaGVscCBmaWxlIGZvciBtZ3VzMiBpbiB0aGUgZXZlbnRnbG0gZG9jdW1lbnRhdGlvbi4gVGhlbiBzcGVjaWZ5IGFuZCBmaXQgYSByZWdyZXNzaW9uIG1vZGVsIHRvIGFuc3dlciBhIHBhcnRpY3VsYXIgc2NpZW50aWZpYyBxdWVzdGlvbiBmb3IgdGhpcyBkYXRhc2V0LiBJbnRlcnByZXQgdGhlIHJlbGV2YW50IGNvZWZmaWNpZW50cyBmcm9tIHRoZSBtb2RlbC4gDQoNCjxkZXRhaWxzPg0KPHN1bW1hcnk+PHN0cm9uZz5Tb2x1dGlvbjwvc3Ryb25nPjwvc3VtbWFyeT4NCg0KYGBge3J9DQpzdW1tYXJ5KG1ndXMyKQ0KYGBgDQoNClRoZSBwdXJwb3NlIG9mIHRoaXMgc3R1ZHkgd2FzIHRvIGRldGVybWluZSB3aGV0aGVyIHRoZXJlIGFyZSBhbnkgcmVsaWFibGUgcHJlZGljdG9ycyBvZiBwcm9ncmVzc2lvbiB0byBtYWxpZ25hbmN5LiANCg0KYGBge3J9DQptZ2ZpdGNpMiA8LSBjdW1pbmNnbG0oU3VydihldGltZSwgZXZlbnQpIH4gc2V4ICsgYWdlICsgaGdiICsgY3JlYXQgKyBtc3Bpa2UsIA0KICAgICAgICAgICAgICAgICAgICAgIGNhdXNlID0gInBjbSIsIA0KICAgICAgICAgICAgICAgICAgICAgIHRpbWUgPSAxMjAsIGRhdGEgPSBtZ3VzMikNCnN1bW1hcnkobWdmaXRjaTIpDQptZ2ZpdHJtZWFuMiA8LSBybWVhbmdsbShTdXJ2KGV0aW1lLCBldmVudCkgfiBzZXggKyBhZ2UgKyBoZ2IgKyBjcmVhdCArIG1zcGlrZSwgDQogICAgICAgICAgICAgICAgICAgICAgICBjYXVzZSA9ICJwY20iLCANCiAgICAgICAgICAgICAgICAgICAgICB0aW1lID0gMTIwLCBkYXRhID0gbWd1czIpDQpzdW1tYXJ5KG1nZml0cm1lYW4yKQ0KYGBgDQoNClRoZSBzaXplIG9mIHRoZSBtb25vY2xvbmFsIHNlcnVtIHNwaWtlIGFwcGVhcnMgdG8gYmUgYW4gaW5kZXBlbmRlbnQgcHJlZGljdG9yIG9mIHRoZSByaXNrIG9mIHBjbSB3aXRoaW4gMTAgeWVhcnMsIHdpdGggYSA1LjclIGhpZ2hlciByaXNrIGZvciBlYWNoIHVuaXQgaW5jcmVhc2UgaW4gbXNwaWtlLCBhZGp1c3RlZCBmb3IgY3JlYXRpbmluZSwgaGVtb2dsb2JpbiwgYWdlIGFuZCBzZXguIExpa2V3aXNlLCBhIHVuaXQgaW5jcmVhc2UgaW4gbXNwaWtlIGlzIGFzc29jaWF0ZWQgd2l0aCBhbiBleHBlY3RlZCA0IG1vbnRocyBsaWZldGltZSBsb3N0IGR1ZSB0byBQQ00sIGFkanVzdGVkIGZvciB0aGUgb3RoZXIgdmFyaWFibGVzLiANCg0KVGhlIG9iamVjdHMgcmV0dXJuZWQgYnkgYGN1bWluY2dsbWAgYW5kIGBybWVhbmdsbWAgaW5oZXJpdCBmcm9tIGBnbG1gLCBzbyBtYW55IG1ldGhvZHMgYXJlIGF2YWlsYWJsZSwgaW5jbHVkaW5nIGBwcmVkaWN0YCBhbmQgYHJlc2lkYC4gUmVzaWR1YWxzIHVzZSB0aGUgc2NhbGluZyBmYWN0b3Igc3VnZ2VzdGVkIGJ5IEBwZXJtZTIwMDhjaGVja2luZywgYXMgZG8gcHJlZGljdGlvbnMuIFByZWRpY3RlZCByZXN0cmljdGVkIG1lYW5zIGdpdmUgYSBwb3NzaWJsZSBtZXRob2QgdG8gcHJlZGljdCBpbmRpdmlkdWFsIGV2ZW50IHRpbWVzLCB3aGlsZSB0aGUgcHJlZGljdGVkIGN1bXVsYXRpdmUgaW5jaWRlbmNlIHNob3VsZCBiZSBwcm9iYWJpbGl0aWVzLiBOb3RlIHRoYXQgd2l0aCB0aGUgaWRlbnRpdHkgbGluaywgdGhlIHByZWRpY3RlZCBjdW11bGF0aXZlIGluY2lkZW5jZSBpcyBub3QgZ3VhcmFudGVlZCB0byBiZSBiZXR3ZWVuIDAgYW5kIDEuIA0KDQpgYGB7cn0NCmhpc3QocHJlZGljdChtZ2ZpdHJtZWFuMiwgbmV3ZGF0YSA9IG1ndXMyKSwgDQogICAgIHhsYWIgPSAiUHJlZGljdGVkIGxpZmV0aW1lIGxvc3QgZHVlIHRvIFBDTSIsIG1haW4gPSAiIikNCm1ndXMyJHByb2IucGNtMTAgPC0gcHJlZGljdChtZ2ZpdGNpMiwgbmV3ZGF0YSA9IG1ndXMyKQ0KbWd1czIkcHNldWRvLmNpIDwtIG1nZml0Y2kkeQ0Kc3VtbWFyeShtZ3VzMiRwcm9iLnBjbTEwKQ0KY3V0cHMgPC0gcXVhbnRpbGUobWd1czIkcHJvYi5wY20xMCwgc2VxKC4xLCAuOSwgYnkgPSAuMSksIG5hLnJtID0gVFJVRSkNCm1ndXMyJHByb2IuY3V0IDwtIGN1dChtZ3VzMiRwcm9iLnBjbTEwLCANCiAgICAgICAgICAgICAgICAgICAgICBjdXRwcykNCnByZWQucCA8LSBjdXRwc1stbGVuZ3RoKGN1dHBzKV0gKyBkaWZmKGN1dHBzKQ0Kb2JzLnAgPC0gYyhieShtZ3VzMiRwc2V1ZG8uY2ksIG1ndXMyJHByb2IuY3V0LCBtZWFuKSkNCnBsb3Qob2JzLnAgfiBwcmVkLnAsIHhsYWIgPSAicHJlZGljdGVkIDEwIHllYXIgcmlzayIsIHlsYWIgPSAib2JzZXJ2ZWQgMTAgeWVhciByaXNrIikNCmFibGluZSgwLCAxKQ0KYGBgDQo8L2RldGFpbHM+DQoNCg0KDQojIyBKb2ludCBtb2RlbGxpbmcgb3ZlciBtdWx0aXBsZSB0aW1lcw0KDQpZb3UgY2FuIHNwZWNpZnkgYSB2ZWN0b3Igb2YgdGltZXMgaW4gYGN1bWluY2dsbWAgdG8gZ2V0IGEgbW9kZWwgdGhhdCBhc3N1bWVzIHRoZSBlZmZlY3Qgb2YgdGhlIGNvdmFyaWF0ZSBpcyBjb25zdGFudCBvdmVyIHRob3NlIHRpbWVzLiBMZXQncyBzZWUgaG93IHRoaXMgd29ya3MgaW4gdGhlIGBjb2xvbmAgZXhhbXBsZS4NCg0KYGBge3J9DQptdnRmaXQxIDwtIGN1bWluY2dsbShTdXJ2KHRpbWUsIHN0YXR1cykgfiByeCwgDQogICAgICAgIHRpbWUgPSBjKDUwMCwgMTAwMCwgMTUwMCwgMjAwMCwgMjUwMCksDQogICAgICAgIGRhdGEgPSBjb2xvbiwgc3Vydml2YWwgPSBUUlVFKQ0Kc3VtbWFyeShtdnRmaXQxKQ0KYGBgDQoNClRoaXMgZml0cyB0aGUgbW9kZWwgKGluIGdlbmVyYWwgdGVybXMpDQokJGdce1AoVF9pIDwgdF9ifCBYX2kgPSB4X2kpXH0gPSAoXGJldGFfMCArIFxiZXRhX2IpICsgXGJldGFfMXhfaSwgYiA9IDEsIFxsZG90cywgay4kJA0KDQpJbiB0aGlzIG1vZGVsLCB0aGUgaW50ZXJjZXB0IGlzIHRoZSBzdXJ2aXZhbCBwcm9iYWJpbGl0eSBpbiB0aGUgT2JzIGFybSBhdCB0aW1lIDUwMCAodGhlIHJlZmVyZW5jZSB0aW1lKS4gVGhlIHRlcm1zIGxhYmVsZWQgYGZhY3Rvcihwc2V1ZG8udGltZSl0YCByZXByZXNlbnQgdGhlIGNoYW5nZSBpbiB0aGUgaW50ZXJjZXB0IGFzc29jaWF0ZWQgd2l0aCB0aGUgdGltZSBgdGAuIFNvLCBmb3IgZXhhbXBsZSwgdGhlIHN1cnZpdmFsIHByb2JhYmlsaXR5IGluIHRoZSBPYnMgYXJtIGF0IHRpbWUgMTAwMCBpcyBgciByb3VuZChjb2VmKG12dGZpdDEpWzFdLCAyKWAgKyBgciByb3VuZChjb2VmKG12dGZpdDEpWzJdLCAyKWAgPSBgciByb3VuZChzdW0oY29lZihtdnRmaXQxKVsxOjJdKSwgMilgLg0KDQpMb29raW5nIGF0IHRoZSBzdXJ2aXZhbCBjdXJ2ZXMgaW4gcHJldmlvdXMgbGVzc29uLCB0aGUgYXNzdW1wdGlvbiBvZiBhIGNvbnN0YW50IHRyZWF0bWVudCBlZmZlY3Qgb24gdGhlIHN1cnZpdmFsIGRpZmZlcmVuY2Ugc2NhbGUgbWF5IGJlIHF1ZXN0aW9uYWJsZS4gV2UgY2FuIGFsbG93IGNvdmFyaWF0ZSBlZmZlY3RzIHRvIGJlIHRpbWUgZGVwZW5kZW50IGJ5IHdyYXBwaW5nIHRoZW0gaW4gdGhlIHNwZWNpYWwgdGVybSBgdHZlKClgIGluIHRoZSByaWdodCBzaWRlIG9mIHRoZSBmb3JtdWxhLiANCg0KDQpgYGB7cn0NCm12dGZpdDIgPC0gY3VtaW5jZ2xtKFN1cnYodGltZSwgc3RhdHVzKSB+IHR2ZShyeCksIA0KICAgICAgICB0aW1lID0gYyg1MDAsIDEwMDAsIDE1MDAsIDIwMDAsIDI1MDApLA0KICAgICAgICBkYXRhID0gY29sb24sIHN1cnZpdmFsID0gVFJVRSkNCnN1bW1hcnkobXZ0Zml0MikNCmBgYA0KDQpUaGlzIGZpdHMgdGhlIG1vZGVsDQoNCiQkZ1x7UChUX2kgPCB0X2J8IFhfaSA9IHhfaSlcfSA9IChcYmV0YV8wICsgXGJldGFfYikgKyBcZ2FtbWFfYiB4X2ksIGIgPSAxLCBcbGRvdHMsIGskJA0KDQoNCk5vdyB0aGUgY29lZmZpY2llbnRzIGxhYmVsZWQgYGZhY3Rvcihwc2V1ZG8udGltZSl0OkNvdmFyaWF0ZWAgcmVwcmVzZW50IHRoZSBjb3ZhcmlhdGUgZWZmZWN0IGF0IHRpbWUgYHRgLiBTbywgZm9yIGV4YW1wbGUsIHRoZSBkaWZmZXJlbmNlIGluIHN1cnZpdmFsIHByb2JhYmlsaXRpZXMgb2YgTGV2YW1pc29sZSBwbHVzIDUtRlUgdG8gT2JzZXJ2YXRpb24gYXQgdGltZSAxNTAwIGlzIA0KDQpgYGB7cn0gDQpyb3VuZChzdW1tYXJ5KG12dGZpdDIpJGNvZWZmaWNpZW50c1sxMywsIGRyb3AgPSBGQUxTRV0sMikNCmBgYCANCg0KQ29tcGFyZSB3aXRoIHRoZSBlc3RpbWF0ZSBmcm9tIHN1cnZmaXQ6IA0KDQpgYGB7cn0NCnNmaXQgPC0gc3VydmZpdChTdXJ2KHRpbWUsIHN0YXR1cykgfiByeCwgZGF0YSA9IGNvbG9uKQ0Kcm91bmQoc3VtbWFyeShzZml0LCB0aW1lcyA9IDE1MDApJHN1cnZbM10gLSANCiAgc3VtbWFyeShzZml0LCB0aW1lcyA9IDE1MDApJHN1cnZbMV0sIDIpDQpgYGANCg0KVGhlIGtleSBhZHZhbnRhZ2Ugb2YgdGhlIHJlZ3Jlc3Npb24gYXBwcm9hY2ggaXMgdGhhdCB3ZSBjYW4gYWRqdXN0IGZvciBjb3ZhcmlhdGVzLCBkbyBpbmZlcmVuY2UgZGlyZWN0bHksIGFuZCBoYXZlIG1vcmUgZmxleGlibGUgbW9kZWxzLiBUaGUgYHR2ZWAgdGVybSBhbGxvd3MgeW91IHRvIGhhdmUgYSBtaXggb2YgdGltZS12YXJ5aW5nIGFuZCB0aW1lLWNvbnN0YW50IGVmZmVjdHMuIEp1c3QgYXBwbHkgaXQgdG8gYW55IGNvdmFyaWF0ZSB0aGF0IHlvdSB3YW50IHRvIGJlIHRpbWUtdmFyeWluZy4NCg0KDQojIyMgRXhlcmNpc2Ugey5hbGVydCAuYWxlcnQtd2FybmluZ30NCg0KSW4gdGhlIGBtdnRmaXQyYCBtb2RlbCwgY29uc3RydWN0IGEgcHJvY2VkdXJlIHRvIHRlc3QgdGhlIG51bGwgaHlwb3RoZXNpcyB0aGF0IHRoZXJlIGlzIG5vIGRpZmZlcmVuY2UgaW4gc3Vydml2YWwgY29tcGFyaW5nIExldis1RlUgdG8gdGhlIE9icyBncm91cCBfYXQgYW55IG9mIHRoZSA1IHRpbWVzXyBpbiB0aGUgbW9kZWwuIA0KDQo8ZGV0YWlscz4NCjxzdW1tYXJ5PjxzdHJvbmc+U29sdXRpb248L3N0cm9uZz48L3N1bW1hcnk+DQpUaGUgbnVsbCBoeXBvdGhlc2lzIGlzIHRoYXQgdGhlIDUgY29lZmZpY2llbnRzIHdpdGggdGhlIGxhYmVsIGByeExldis1RlVgIGFyZSBzaW11bHRhbmVvdXNseSBlcXVhbCB0byAwLiBXZSBjYW4gdGVzdCB0aGlzIGJ5IGRvaW5nIGEgV2FsZCB0ZXN0IG1hbnVhbGx5IHVzaW5nIHRoZSBlc3RpbWF0ZWQgY292YXJpYW5jZSBtYXRyaXggb2YgdGhlIGVzdGltYXRlZCBjb2VmZmljaWVudHM6IA0KDQpgYGB7cn0NCnRkZXggPC0gZ3JlcCgicnhMZXYrNUZVIiwgbmFtZXMoY29lZihtdnRmaXQyKSksIGZpeGVkID0gVFJVRSkNCg0KV3N0YXQgPC0gYyh0KGNvZWYobXZ0Zml0MilbdGRleF0pICUqJSANCiAgICAgICAgICAgICBzb2x2ZSh2Y292KG12dGZpdDIpW3RkZXgsIHRkZXhdKSAlKiUgDQogICAgICAgICAgICAgY29lZihtdnRmaXQyKVt0ZGV4XSkNCiMjIHVuZGVyIHRoZSBudWxsIHRoaXMgaXMgQ2hpc3Egd2l0aCA1IGRlZ3JlZXMgb2YgZnJlZWRvbQ0KcGNoaXNxKFdzdGF0LCBkZiA9IGxlbmd0aCh0ZGV4KSwgbG93ZXIudGFpbCA9IEZBTFNFKQ0KDQpgYGANCg0KPC9kZXRhaWxzPg0KDQoNCiMjIyBSZWxhdGlvbnNoaXAgdG8gdGhlIENveCBtb2RlbA0KDQpUaGUgYGNsb2dsb2dgIGxpbmsgZnVuY3Rpb24gc3RhbmRzIGZvciAiY29tcGxlbWVudGFyeSBsb2ctbG9nIiwgYW5kIGlzIGRlZmluZWQgJGcoeCkgPSBcbG9nKC1cbG9nKDEgLSB4KSkkLiBIZW5jZSBhIG1vZGVsIGZvciB0aGUgY3VtdWxhdGl2ZSBpbmNpZGVuY2Ugd2l0aCB0aGUgY2xvZ2xvZyBsaW5rIGlzDQpcWw0KXGxvZyggLVxsb2coMSAtIFAoVCBcbGVxIHQgfCBYKSkpID0gXGJldGFfMCArIFxiZXRhXzEgWC4gDQpcXQ0KUmVjYWxsIHRoYXQgdGhlIGN1bXVsYXRpdmUgaGF6YXJkICRIKHQpJCBpcyByZWxhdGVkIHRvIHRoZSBzdXJ2aXZhbDogJFModCkgPSBcZXhwKC1IKHQpKSQsIHNvIGludmVydGluZyB0aGlzIHJlbGF0aW9uc2hpcCB3ZSBnZXQgZnJvbSBvdXIgbW9kZWwNClxbDQpcbG9nKEgodCB8IFgpKSA9IFxiZXRhXzAgKyBcYmV0YV8xIFguDQpcXQ0KDQpJZiBhIHByb3BvcnRpb25hbCBoYXphcmRzIENveCBtb2RlbCBob2xkcyB0aGVuDQpcWw0KUyh0IHwgWCkgPSBcZXhwKC0gSF8wKHQpIFxleHAoXGdhbW1hIFgpKQ0KXF0NCndoZXJlICRIXzAodCkgPSBIKHQgfCBYID0gMCkkLCBvciBlcXVpdmFsZW50bHkNClxbDQpcbG9nKC1cbG9nKFModCB8IFgpKSkgPSBcbG9nKEhfMCh0KSkgKyBcZ2FtbWEgWC4NClxdDQoNClRodXMgZml0dGluZyBhIGBjdW1pbmNnbG1gIG1vZGVsIHNob3VsZCBnaXZlIHVzIHNpbWlsYXIgcmVzdWx0cyBhcyBhIENveCBtb2RlbC4gTGV0J3MgdHJ5IGl0IG9uIHRoZSBjb2xvbiBkYXRhc2V0LiANCg0KYGBge3J9DQojIyBkdW1teSB2YXJpYWJsZSBmb3IgdGhlIHRyZWF0bWVudCBncm91cA0KY29sb24kcnhMZXY1RlUgPC0gMS4wICogKGNvbG9uJHJ4ID09ICJMZXYrNUZVIikNCg0KY29sb24uY2xsIDwtIGN1bWluY2dsbShTdXJ2KHRpbWUsIHN0YXR1cykgfiByeExldjVGVSwgZGF0YSA9IGNvbG9uLCANCiAgICAgICAgICAgICAgICAgICAgICAgdGltZSA9IDE1MDAsIGxpbmsgPSAiY2xvZ2xvZyIpDQpzdW1tYXJ5KGNvbG9uLmNsbCkNCg0KY29sb24uY294IDwtIGNveHBoKFN1cnYodGltZSwgc3RhdHVzKSB+IHJ4TGV2NUZVLCBkYXRhID0gY29sb24pDQpzdW1tYXJ5KGNvbG9uLmNveCkNCmBgYA0KDQoNClRoZSBjb2VmZmljaWVudHMgYXJlIHNpbWlsYXIsIGJ1dCBub3QgdGhhdCBjbG9zZSBjb21wYXJpbmcgdGhlIHR3byBtb2RlbCByZXN1bHRzLiANCg0KIyMjIyBTdG9wIGFuZCB0aGluayB7LmFsZXJ0IC5hbGVydC1pbmZvfQ0KDQpIb3cgYXJlIHRoZSBtb2RlbGluZyBhc3N1bXB0aW9ucyBkaWZmZXJlbnQgYmV0d2VlbiB0aGUgdHdvIG1vZGVscyBpbiB0aGUgcHJldmlvdXMgY29kZSBjaHVuaz8gSG93IGNhbiB3ZSBtb2RpZnkgdGhlIGN1bWluY2dsbSBtb2RlbCB0byBnZXQgZXN0aW1hdGVzIGNsb3NlciB0byB0aGUgQ294IG1vZGVsPyANCg0KPGRldGFpbHM+DQo8c3VtbWFyeT48c3Ryb25nPlNvbHV0aW9uPC9zdHJvbmc+PC9zdW1tYXJ5Pg0KVGhlIGtleSBkaWZmZXJlbmNlIGlzIHRoYXQgdGhlIGN1bWluY2dsbSBtb2RlbCBpcyBhc3N1bWluZyBwcm9wb3J0aW9uYWwgaGF6YXJkcywgYnV0IF9fb25seSBhdCBvbmUgdGltZSBwb2ludF9fICgxNTAwKS4gV2UgY2FuIG1vZGlmeSB0aGlzIHRvIGEgbXVsdGlwbGUgdGltZSBwb2ludCBtb2RlbCwgd2hlcmUgd2UgZG8gX25vdF8gd2FudCB0aGUgY29lZmZpY2llbnQgdG8gdmFyeSBpbiB0aW1lLiBJZiB3ZSBkbyBhbGxvdyB0aGUgY29lZmZpY2llbnQgZm9yIExldis1RlUgdG8gdmFyeSBpbiB0aW1lLCB0aGVuIHdlIHdvdWxkIGdldCBzb21ldGhpbmcgc2ltaWxhciB0byBhIENveCBtb2RlbCB3aXRoIHRpbWUgdmFyeWluZyBjb2VmZmljaWVudHMuIA0KDQoNCmBgYHtyfQ0KY29sb24uY2xsMiA8LSBjdW1pbmNnbG0oU3Vydih0aW1lLCBzdGF0dXMpIH4gcnhMZXY1RlUsIGRhdGEgPSBjb2xvbiwgDQogICAgICAgICAgICAgICAgICAgICAgIHRpbWUgPSBjKDUwMCwgMTAwMCwgMTUwMCwgMjAwMCwgMjUwMCksIGxpbmsgPSAiY2xvZ2xvZyIpDQpzdW1tYXJ5KGNvbG9uLmNsbDIpDQpzdW1tYXJ5KGNvbG9uLmNveCkNCg0KY29lZihjb2xvbi5jbGwyKVs2XQ0KY29lZihjb2xvbi5jb3gpDQpgYGANCg0KPC9kZXRhaWxzPg0KDQoNCiMjIFJlZmVyZW5jZXMNCg0K</div>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("cmprisk.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Custom pseudo observation modules</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Using the `eventglm` R package for regression modeling of censored time-to-event outcomes</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lessons
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="basics.html">Lesson 1: Basics</a>
+    </li>
+    <li>
+      <a href="cmprisk.html">Lesson 2: Multiple causes and times</a>
+    </li>
+    <li>
+      <a href="censoring.html">Lesson 3: Censoring models</a>
+    </li>
+    <li>
+      <a href="multivar.html">Lesson 4: Multivariate outcome models</a>
+    </li>
+    <li>
+      <a href="extending.html">Lesson 5: Custom pseudo observation modules</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="biblio.html">References and resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Custom pseudo observation modules</h1>
+
+</div>
+
+
+<div id="learning-objectives" class="section level3 alert alert-success">
+<h3 class="alert alert-success">Learning objectives</h3>
+<p>In this lesson you will</p>
+<ol style="list-style-type: decimal">
+<li>Learn how to extend <code>eventglm</code> to compute pseudo observations in a new way</li>
+</ol>
+</div>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<p>Library the <code>survival</code> package and then the <code>eventglm</code> package. We will use some commands from <code>survival</code> to make sense of what is going on in the regression models.</p>
+<pre class="r"><code>library(survival)
+library(eventglm)</code></pre>
+</div>
+<div id="pseudo-observation-computation-modules" class="section level2">
+<h2>Pseudo observation computation modules</h2>
+<p>As of version 1.1.0, <code>cumincglm</code> and <code>rmeanglm</code> expect the argument <code>model.censoring</code> to be a function. This function is the workhorse that does the computation of the pseudo observations that are later used in the generalized linear model. A number of computation methods are built in as “modules” in the file called “pseudo-modules.R.” Let us take a look at an example:</p>
+<pre class="r"><code>eventglm::pseudo_independent</code></pre>
+<pre><code>## function(formula, time, cause = 1, data,
+##                         type = c(&quot;cuminc&quot;, &quot;survival&quot;, &quot;rmean&quot;),
+##                         formula.censoring = NULL, ipcw.method = NULL){
+## 
+##   margformula &lt;- update.formula(formula, . ~ 1)
+##   mr &lt;- model.response(model.frame(margformula, data = data))
+##   stopifnot(attr(mr, &quot;type&quot;) %in% c(&quot;right&quot;, &quot;mright&quot;))
+##   marginal.estimate &lt;- survival::survfit(margformula, data = data)
+## 
+##   if(type == &quot;cuminc&quot;) {
+## 
+##     POi &lt;- get_pseudo_cuminc(marginal.estimate, time, cause, mr)
+## 
+##   } else if(type == &quot;survival&quot;){
+## 
+##     if(marginal.estimate$type != &quot;right&quot;) {
+##       stop(&quot;Survival estimand not available for outcome with censoring type&quot;, marginal.estimate$type)
+##     }
+## 
+##     POi &lt;- 1 - get_pseudo_cuminc(marginal.estimate, time, cause, mr)
+## 
+##   } else if(type == &quot;rmean&quot;) {
+## 
+##     POi &lt;- get_pseudo_rmean(marginal.estimate, time, cause, mr)
+## 
+##   }
+## 
+##   POi
+## 
+## }
+## &lt;bytecode: 0x00000000204c1e68&gt;
+## &lt;environment: namespace:eventglm&gt;</code></pre>
+<p>This function, and any pseudo observation module, must take the same named arguments (though they do not all have to be used), and return a vector of pseudo observations.</p>
+</div>
+<div id="custom-computation-functions" class="section level2">
+<h2>Custom computation functions</h2>
+<div id="exercise" class="section level3 alert alert-warning">
+<h3 class="alert alert-warning">Exercise</h3>
+<div id="example-parametric-pseudo-observations" class="section level4">
+<h4>Example: Parametric pseudo observations</h4>
+<p>Write a function that fits a parametric survival model with <code>survreg</code> marginally and do jackknife leave one out estimates to construct pseudo-observations. This may be useful if there is interval censoring, for example.</p>
+<details>
+<summary>
+<strong>Solution</strong>
+</summary>
+<pre class="r"><code>pseudo_parametric &lt;- function(formula, time, cause = 1, data,
+                        type = c(&quot;cuminc&quot;, &quot;survival&quot;, &quot;rmean&quot;),
+                        formula.censoring = NULL, ipcw.method = NULL){
+  margformula &lt;- update.formula(formula, . ~ 1)
+  mr &lt;- model.response(model.frame(margformula, data = data))
+  
+  marginal.estimate &lt;- survival::survreg(margformula, data = data, 
+                                         dist = &quot;weibull&quot;)
+  theta &lt;- pweibull(time, shape = 1 / marginal.estimate$scale, 
+                    scale = exp(marginal.estimate$coefficients[1]))
+  
+  theta.i &lt;- sapply(1:nrow(data), function(i) {
+    
+    me &lt;- survival::survreg(margformula, data = data[-i, ], dist = &quot;weibull&quot;)
+    pweibull(time, shape = 1 / me$scale, 
+                    scale = exp(me$coefficients[1]))
+  
+    
+  })
+  
+  POi &lt;- theta  + (nrow(data) - 1) * (theta - theta.i)
+  POi
+}</code></pre>
+<p>Now let us try it out by passing it to the <code>cumincglm</code> function and compare to the default independence estimator:</p>
+<pre class="r"><code>fitpara &lt;- cumincglm(Surv(time, status) ~ rx + sex + age, time = 2500, 
+                  model.censoring = pseudo_parametric, 
+                  data = colon)
+fitdef &lt;- cumincglm(Surv(time, status) ~ rx + sex + age, time = 2500, 
+                  model.censoring = &quot;independent&quot;, 
+                  data = colon)
+knitr::kable(sapply(list(parametric = fitpara, default = fitdef), 
+       coefficients))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">parametric</th>
+<th align="right">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">0.5473823</td>
+<td align="right">0.4891055</td>
+</tr>
+<tr class="even">
+<td align="left">rxLev</td>
+<td align="right">-0.0216382</td>
+<td align="right">-0.0292873</td>
+</tr>
+<tr class="odd">
+<td align="left">rxLev+5FU</td>
+<td align="right">-0.1488142</td>
+<td align="right">-0.1326516</td>
+</tr>
+<tr class="even">
+<td align="left">sex</td>
+<td align="right">0.0008129</td>
+<td align="right">-0.0102263</td>
+</tr>
+<tr class="odd">
+<td align="left">age</td>
+<td align="right">0.0004233</td>
+<td align="right">0.0010047</td>
+</tr>
+</tbody>
+</table>
+<p>You can also refer to the function with a string, omitting the “pseudo_” prefix, if you wish, e.g.,</p>
+<pre class="r"><code>fit1 &lt;- cumincglm(Surv(time, status) ~ rx + sex + age, time = 2500, 
+                  model.censoring = &quot;parametric&quot;, 
+                  data = colon)</code></pre>
+</details>
+</div>
+</div>
+<div id="example-2-infinitesimal-jackknife" class="section level3">
+<h3>Example 2: infinitesimal jackknife</h3>
+<p>When the survival package version 3.0 was released, it became possible to get the influence function values returned from some estimation functions. These efficient influence functions are used in the variance calculations, and they are related to pseudo observations. More information is available in the “pseudo.Rnw” vignette of the development version of survival. This feature has been incorporated into the latest version of <code>eventglm</code>, available in the <code>pseudo_infjack</code> module.</p>
+<p>Below here is a simplified version. Use this as inspiration to create a module for an estimand of interest in a multi-state model (say the illness death model).</p>
+<pre class="r"><code>pseudo_infjack &lt;- function(formula, time, cause = 1, data,
+                        type = c(&quot;cuminc&quot;, &quot;survival&quot;, &quot;rmean&quot;),
+                        formula.censoring = NULL, ipcw.method = NULL) {
+  
+  marginal.estimate2 &lt;- survival::survfit(update.formula(formula, . ~ 1),
+                                             data = data, influence = TRUE)
+     tdex &lt;- sapply(time, function(x) max(which(marginal.estimate2$time &lt;= x)))
+     pstate &lt;- marginal.estimate2$surv[tdex]
+     ## S(t) + (n)[S(t) -S_{-i}(t)]
+     POi &lt;- matrix(pstate, nrow = marginal.estimate2$n, ncol = length(time), byrow = TRUE) +
+         (marginal.estimate2$n) *
+         (marginal.estimate2$influence.surv[, tdex])
+     
+     POi
+}</code></pre>
+<p>Note that this computes pseudo observations for survival, rather than the cumulative incidence, so to compare we can use the survival = TRUE option. Now we try it out</p>
+<pre class="r"><code>fitinf &lt;- cumincglm(Surv(time, status) ~ rx + sex + age, time = 2500, 
+                  model.censoring = &quot;infjack&quot;, 
+                  survival = TRUE,
+                  data = colon)
+fitdefsurv &lt;- cumincglm(Surv(time, status) ~ rx + sex + age, time = 2500, 
+                  survival = TRUE,
+                  data = colon)
+knitr::kable(sapply(list(infjack = fitinf, default = fitdefsurv), 
+       coefficients))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">infjack</th>
+<th align="right">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">0.5108264</td>
+<td align="right">0.5108945</td>
+</tr>
+<tr class="even">
+<td align="left">rxLev</td>
+<td align="right">0.0292609</td>
+<td align="right">0.0292873</td>
+</tr>
+<tr class="odd">
+<td align="left">rxLev+5FU</td>
+<td align="right">0.1326361</td>
+<td align="right">0.1326516</td>
+</tr>
+<tr class="even">
+<td align="left">sex</td>
+<td align="right">0.0102568</td>
+<td align="right">0.0102263</td>
+</tr>
+<tr class="odd">
+<td align="left">age</td>
+<td align="right">-0.0010036</td>
+<td align="right">-0.0010047</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkN1c3RvbSBwc2V1ZG8gb2JzZXJ2YXRpb24gbW9kdWxlcyINCm91dHB1dDoNCiAgaHRtbF9kb2N1bWVudDoNCiAgICBjb2RlX2ZvbGRpbmc6IHNob3cNCmJpYmxpb2dyYXBoeTogcmVmcy5iaWINCi0tLQ0KDQojIyMgTGVhcm5pbmcgb2JqZWN0aXZlcyB7LmFsZXJ0IC5hbGVydC1zdWNjZXNzfQ0KDQpJbiB0aGlzIGxlc3NvbiB5b3Ugd2lsbCANCg0KMS4gTGVhcm4gaG93IHRvIGV4dGVuZCBgZXZlbnRnbG1gIHRvIGNvbXB1dGUgcHNldWRvIG9ic2VydmF0aW9ucyBpbiBhIG5ldyB3YXkNCg0KDQojIyBTZXR1cA0KDQpMaWJyYXJ5IHRoZSBgc3Vydml2YWxgIHBhY2thZ2UgYW5kIHRoZW4gdGhlIGBldmVudGdsbWAgcGFja2FnZS4gV2Ugd2lsbCB1c2Ugc29tZSBjb21tYW5kcyBmcm9tIGBzdXJ2aXZhbGAgdG8gbWFrZSBzZW5zZSBvZiB3aGF0IGlzIGdvaW5nIG9uIGluIHRoZSByZWdyZXNzaW9uIG1vZGVscy4NCg0KDQpgYGB7cn0NCmxpYnJhcnkoc3Vydml2YWwpDQpsaWJyYXJ5KGV2ZW50Z2xtKQ0KYGBgDQoNCg0KIyMgUHNldWRvIG9ic2VydmF0aW9uIGNvbXB1dGF0aW9uIG1vZHVsZXMNCg0KQXMgb2YgdmVyc2lvbiAxLjEuMCwgYGN1bWluY2dsbWAgYW5kIGBybWVhbmdsbWAgZXhwZWN0IHRoZSBhcmd1bWVudCBgbW9kZWwuY2Vuc29yaW5nYCB0byBiZSBhIGZ1bmN0aW9uLiBUaGlzIGZ1bmN0aW9uIGlzIHRoZSB3b3JraG9yc2UgdGhhdCBkb2VzIHRoZSBjb21wdXRhdGlvbiBvZiB0aGUgcHNldWRvIG9ic2VydmF0aW9ucyB0aGF0IGFyZSBsYXRlciB1c2VkIGluIHRoZSBnZW5lcmFsaXplZCBsaW5lYXIgbW9kZWwuIEEgbnVtYmVyIG9mIGNvbXB1dGF0aW9uIG1ldGhvZHMgYXJlIGJ1aWx0IGluIGFzICJtb2R1bGVzIiBpbiB0aGUgZmlsZSBjYWxsZWQgInBzZXVkby1tb2R1bGVzLlIiLiBMZXQgdXMgdGFrZSBhIGxvb2sgYXQgYW4gZXhhbXBsZTogDQoNCmBgYHtyfQ0KZXZlbnRnbG06OnBzZXVkb19pbmRlcGVuZGVudA0KYGBgDQoNClRoaXMgZnVuY3Rpb24sIGFuZCBhbnkgcHNldWRvIG9ic2VydmF0aW9uIG1vZHVsZSwgbXVzdCB0YWtlIHRoZSBzYW1lIG5hbWVkIGFyZ3VtZW50cyAodGhvdWdoIHRoZXkgZG8gbm90IGFsbCBoYXZlIHRvIGJlIHVzZWQpLCBhbmQgcmV0dXJuIGEgdmVjdG9yIG9mIHBzZXVkbyBvYnNlcnZhdGlvbnMuIA0KDQoNCiMjIEN1c3RvbSBjb21wdXRhdGlvbiBmdW5jdGlvbnMNCg0KIyMjIEV4ZXJjaXNlIHsuYWxlcnQgLmFsZXJ0LXdhcm5pbmd9DQoNCg0KIyMjIyBFeGFtcGxlOiBQYXJhbWV0cmljIHBzZXVkbyBvYnNlcnZhdGlvbnMNCg0KV3JpdGUgYSBmdW5jdGlvbiB0aGF0IGZpdHMgYSBwYXJhbWV0cmljIHN1cnZpdmFsIG1vZGVsIHdpdGggYHN1cnZyZWdgIG1hcmdpbmFsbHkgYW5kIGRvIGphY2trbmlmZSBsZWF2ZSBvbmUgb3V0IGVzdGltYXRlcyB0byBjb25zdHJ1Y3QgcHNldWRvLW9ic2VydmF0aW9ucy4gVGhpcyBtYXkgYmUgdXNlZnVsIGlmIHRoZXJlIGlzIGludGVydmFsIGNlbnNvcmluZywgZm9yIGV4YW1wbGUuIA0KDQo8ZGV0YWlscz4NCjxzdW1tYXJ5PjxzdHJvbmc+U29sdXRpb248L3N0cm9uZz48L3N1bW1hcnk+DQoNCmBgYHtyfQ0KcHNldWRvX3BhcmFtZXRyaWMgPC0gZnVuY3Rpb24oZm9ybXVsYSwgdGltZSwgY2F1c2UgPSAxLCBkYXRhLA0KICAgICAgICAgICAgICAgICAgICAgICAgdHlwZSA9IGMoImN1bWluYyIsICJzdXJ2aXZhbCIsICJybWVhbiIpLA0KICAgICAgICAgICAgICAgICAgICAgICAgZm9ybXVsYS5jZW5zb3JpbmcgPSBOVUxMLCBpcGN3Lm1ldGhvZCA9IE5VTEwpew0KICBtYXJnZm9ybXVsYSA8LSB1cGRhdGUuZm9ybXVsYShmb3JtdWxhLCAuIH4gMSkNCiAgbXIgPC0gbW9kZWwucmVzcG9uc2UobW9kZWwuZnJhbWUobWFyZ2Zvcm11bGEsIGRhdGEgPSBkYXRhKSkNCiAgDQogIG1hcmdpbmFsLmVzdGltYXRlIDwtIHN1cnZpdmFsOjpzdXJ2cmVnKG1hcmdmb3JtdWxhLCBkYXRhID0gZGF0YSwgDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRpc3QgPSAid2VpYnVsbCIpDQogIHRoZXRhIDwtIHB3ZWlidWxsKHRpbWUsIHNoYXBlID0gMSAvIG1hcmdpbmFsLmVzdGltYXRlJHNjYWxlLCANCiAgICAgICAgICAgICAgICAgICAgc2NhbGUgPSBleHAobWFyZ2luYWwuZXN0aW1hdGUkY29lZmZpY2llbnRzWzFdKSkNCiAgDQogIHRoZXRhLmkgPC0gc2FwcGx5KDE6bnJvdyhkYXRhKSwgZnVuY3Rpb24oaSkgew0KICAgIA0KICAgIG1lIDwtIHN1cnZpdmFsOjpzdXJ2cmVnKG1hcmdmb3JtdWxhLCBkYXRhID0gZGF0YVstaSwgXSwgZGlzdCA9ICJ3ZWlidWxsIikNCiAgICBwd2VpYnVsbCh0aW1lLCBzaGFwZSA9IDEgLyBtZSRzY2FsZSwgDQogICAgICAgICAgICAgICAgICAgIHNjYWxlID0gZXhwKG1lJGNvZWZmaWNpZW50c1sxXSkpDQogIA0KICAgIA0KICB9KQ0KICANCiAgUE9pIDwtIHRoZXRhICArIChucm93KGRhdGEpIC0gMSkgKiAodGhldGEgLSB0aGV0YS5pKQ0KICBQT2kNCn0NCmBgYA0KDQoNCk5vdyBsZXQgdXMgdHJ5IGl0IG91dCBieSBwYXNzaW5nIGl0IHRvIHRoZSBgY3VtaW5jZ2xtYCBmdW5jdGlvbiBhbmQgY29tcGFyZSB0byB0aGUgZGVmYXVsdCBpbmRlcGVuZGVuY2UgZXN0aW1hdG9yOiANCg0KYGBge3J9DQpmaXRwYXJhIDwtIGN1bWluY2dsbShTdXJ2KHRpbWUsIHN0YXR1cykgfiByeCArIHNleCArIGFnZSwgdGltZSA9IDI1MDAsIA0KICAgICAgICAgICAgICAgICAgbW9kZWwuY2Vuc29yaW5nID0gcHNldWRvX3BhcmFtZXRyaWMsIA0KICAgICAgICAgICAgICAgICAgZGF0YSA9IGNvbG9uKQ0KZml0ZGVmIDwtIGN1bWluY2dsbShTdXJ2KHRpbWUsIHN0YXR1cykgfiByeCArIHNleCArIGFnZSwgdGltZSA9IDI1MDAsIA0KICAgICAgICAgICAgICAgICAgbW9kZWwuY2Vuc29yaW5nID0gImluZGVwZW5kZW50IiwgDQogICAgICAgICAgICAgICAgICBkYXRhID0gY29sb24pDQprbml0cjo6a2FibGUoc2FwcGx5KGxpc3QocGFyYW1ldHJpYyA9IGZpdHBhcmEsIGRlZmF1bHQgPSBmaXRkZWYpLCANCiAgICAgICBjb2VmZmljaWVudHMpKQ0KYGBgDQoNCllvdSBjYW4gYWxzbyByZWZlciB0byB0aGUgZnVuY3Rpb24gd2l0aCBhIHN0cmluZywgb21pdHRpbmcgdGhlICJwc2V1ZG9fIiBwcmVmaXgsIGlmIHlvdSB3aXNoLCBlLmcuLCANCg0KYGBge3IsIGV2YWwgPSBGQUxTRX0NCmZpdDEgPC0gY3VtaW5jZ2xtKFN1cnYodGltZSwgc3RhdHVzKSB+IHJ4ICsgc2V4ICsgYWdlLCB0aW1lID0gMjUwMCwgDQogICAgICAgICAgICAgICAgICBtb2RlbC5jZW5zb3JpbmcgPSAicGFyYW1ldHJpYyIsIA0KICAgICAgICAgICAgICAgICAgZGF0YSA9IGNvbG9uKQ0KYGBgDQoNCg0KPC9kZXRhaWxzPg0KDQoNCiMjIyBFeGFtcGxlIDI6IGluZmluaXRlc2ltYWwgamFja2tuaWZlDQoNCldoZW4gdGhlIHN1cnZpdmFsIHBhY2thZ2UgdmVyc2lvbiAzLjAgd2FzIHJlbGVhc2VkLCBpdCBiZWNhbWUgcG9zc2libGUgdG8gZ2V0IHRoZSBpbmZsdWVuY2UgZnVuY3Rpb24gdmFsdWVzIHJldHVybmVkIGZyb20gc29tZSBlc3RpbWF0aW9uIGZ1bmN0aW9ucy4gVGhlc2UgZWZmaWNpZW50IGluZmx1ZW5jZSBmdW5jdGlvbnMgYXJlIHVzZWQgaW4gdGhlIHZhcmlhbmNlIGNhbGN1bGF0aW9ucywgYW5kIHRoZXkgYXJlIHJlbGF0ZWQgdG8gcHNldWRvIG9ic2VydmF0aW9ucy4gTW9yZSBpbmZvcm1hdGlvbiBpcyBhdmFpbGFibGUgaW4gdGhlICJwc2V1ZG8uUm53IiB2aWduZXR0ZSBvZiB0aGUgZGV2ZWxvcG1lbnQgdmVyc2lvbiBvZiBzdXJ2aXZhbC4gVGhpcyBmZWF0dXJlIGhhcyBiZWVuIGluY29ycG9yYXRlZCBpbnRvIHRoZSBsYXRlc3QgdmVyc2lvbiBvZiBgZXZlbnRnbG1gLCBhdmFpbGFibGUgaW4gdGhlIGBwc2V1ZG9faW5mamFja2AgbW9kdWxlLiANCg0KDQpCZWxvdyBoZXJlIGlzIGEgc2ltcGxpZmllZCB2ZXJzaW9uLiBVc2UgdGhpcyBhcyBpbnNwaXJhdGlvbiB0byBjcmVhdGUgYSBtb2R1bGUgZm9yIGFuIGVzdGltYW5kIG9mIGludGVyZXN0IGluIGEgbXVsdGktc3RhdGUgbW9kZWwgKHNheSB0aGUgaWxsbmVzcyBkZWF0aCBtb2RlbCkuIA0KDQpgYGB7cn0NCnBzZXVkb19pbmZqYWNrIDwtIGZ1bmN0aW9uKGZvcm11bGEsIHRpbWUsIGNhdXNlID0gMSwgZGF0YSwNCiAgICAgICAgICAgICAgICAgICAgICAgIHR5cGUgPSBjKCJjdW1pbmMiLCAic3Vydml2YWwiLCAicm1lYW4iKSwNCiAgICAgICAgICAgICAgICAgICAgICAgIGZvcm11bGEuY2Vuc29yaW5nID0gTlVMTCwgaXBjdy5tZXRob2QgPSBOVUxMKSB7DQogIA0KICBtYXJnaW5hbC5lc3RpbWF0ZTIgPC0gc3Vydml2YWw6OnN1cnZmaXQodXBkYXRlLmZvcm11bGEoZm9ybXVsYSwgLiB+IDEpLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZGF0YSA9IGRhdGEsIGluZmx1ZW5jZSA9IFRSVUUpDQogICAgIHRkZXggPC0gc2FwcGx5KHRpbWUsIGZ1bmN0aW9uKHgpIG1heCh3aGljaChtYXJnaW5hbC5lc3RpbWF0ZTIkdGltZSA8PSB4KSkpDQogICAgIHBzdGF0ZSA8LSBtYXJnaW5hbC5lc3RpbWF0ZTIkc3Vydlt0ZGV4XQ0KICAgICAjIyBTKHQpICsgKG4pW1ModCkgLVNfey1pfSh0KV0NCiAgICAgUE9pIDwtIG1hdHJpeChwc3RhdGUsIG5yb3cgPSBtYXJnaW5hbC5lc3RpbWF0ZTIkbiwgbmNvbCA9IGxlbmd0aCh0aW1lKSwgYnlyb3cgPSBUUlVFKSArDQogICAgICAgICAobWFyZ2luYWwuZXN0aW1hdGUyJG4pICoNCiAgICAgICAgIChtYXJnaW5hbC5lc3RpbWF0ZTIkaW5mbHVlbmNlLnN1cnZbLCB0ZGV4XSkNCiAgICAgDQogICAgIFBPaQ0KfQ0KYGBgDQoNCk5vdGUgdGhhdCB0aGlzIGNvbXB1dGVzIHBzZXVkbyBvYnNlcnZhdGlvbnMgZm9yIHN1cnZpdmFsLCByYXRoZXIgdGhhbiB0aGUgY3VtdWxhdGl2ZSBpbmNpZGVuY2UsIHNvIHRvIGNvbXBhcmUgd2UgY2FuIHVzZSB0aGUgc3Vydml2YWwgPSBUUlVFIG9wdGlvbi4gTm93IHdlIHRyeSBpdCBvdXQNCg0KYGBge3J9DQpmaXRpbmYgPC0gY3VtaW5jZ2xtKFN1cnYodGltZSwgc3RhdHVzKSB+IHJ4ICsgc2V4ICsgYWdlLCB0aW1lID0gMjUwMCwgDQogICAgICAgICAgICAgICAgICBtb2RlbC5jZW5zb3JpbmcgPSAiaW5mamFjayIsIA0KICAgICAgICAgICAgICAgICAgc3Vydml2YWwgPSBUUlVFLA0KICAgICAgICAgICAgICAgICAgZGF0YSA9IGNvbG9uKQ0KZml0ZGVmc3VydiA8LSBjdW1pbmNnbG0oU3Vydih0aW1lLCBzdGF0dXMpIH4gcnggKyBzZXggKyBhZ2UsIHRpbWUgPSAyNTAwLCANCiAgICAgICAgICAgICAgICAgIHN1cnZpdmFsID0gVFJVRSwNCiAgICAgICAgICAgICAgICAgIGRhdGEgPSBjb2xvbikNCmtuaXRyOjprYWJsZShzYXBwbHkobGlzdChpbmZqYWNrID0gZml0aW5mLCBkZWZhdWx0ID0gZml0ZGVmc3VydiksIA0KICAgICAgIGNvZWZmaWNpZW50cykpDQpgYGANCg==</div>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("extending.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+---
+title: "Overview of estimands and basic regression models"
+output:
+  html_document:
+    code_folding: show
+---
+
+### Learning objectives {.alert .alert-success}
+
+In this lesson you will 
+
+1. Understand the applied context in which `eventglm` is used
+2. Fit some basic models, interpreting the resulting estimates
+3. Compare the `eventglm` models and estimates to what you get from the survival package
+
+
+## Setup
+
+Library the `survival` package and then the `eventglm` package. We will use some commands from `survival` to make sense of what is going on in the regression models.
+
+
+```{r}
+library(survival)
+library(eventglm)
+```
+
+
+## What is the outcome? 
+
+### Colon cancer treatment and time to death (standard survival)
+
+Our first example concerns the `colon` dataset, which is included in the package: 
+
+```{r, eval = FALSE}
+?eventglm::colon
+```
+
+This is a randomized trial, so the main interest is in comparing the distributions of time to death between the three treatment arms. Let's start with a survival curve. 
+
+```{r}
+sfit <- survfit(Surv(time, status) ~ rx, data = colon)
+plot(sfit, col = c("black", "slateblue", "salmon"), 
+     xlab = "days since registration", ylab = "survival")
+legend("bottomleft", fill = c("black", "slateblue", "salmon"), 
+       legend = names(sfit$strata))
+```
+
+There are many ways to summarize the distribution of time to event. We will focus on two options: the survival at a particular time, and the restricted mean survival up to a given time. Let's compare the survival at 7 years, or about 2500 days since registration. 
+
+```{r}
+plot(sfit[1], conf.int = FALSE, xlab = "days since registration", ylab = "survival")
+seg0 <- summary(sfit[1], times = sfit[1]$time[sfit[1]$time <= 2500])
+rect(c(0, seg0$time), 0, c(seg0$time, 2500), c(seg0$surv), 
+     border = NA, col = "grey80")
+lines(sfit[1], conf.int = FALSE)
+abline(v = 2500, lty = 2)
+points(x = 2500, y = summary(sfit[1], times = 2500)$surv)
+```
+
+In the figure above, we plot only the survival curve in the observation group. The vertical dotted line is at the time of interest (tmax = 2500 days). The open point is at the estimated survival probability at time tmax, i.e., $P(T > tmax)$ and the shaded area represents the restricted mean survival up to tmax, i.e., $E\{\min(T, tmax)\} = \int_0^{tmax} P(T > u) \, du$. We can estimate these things using the `survival` package: 
+
+```{r}
+colon.sfit <- summary(sfit, times = 2500, rmean = 2500)
+colon.sfit
+colon.sfit$table
+```
+
+And we can now do inference on these quantities using the `eventglm` package. First, we fit a regression model for the cumulative incidence, or 1 - survival:  
+
+```{r}
+colon.cifit <- cumincglm(Surv(time, status) ~ rx, time = 2500, data = colon)
+summary(colon.cifit)
+se.ci <- sqrt(diag(vcov(colon.cifit, type = "robust")))
+b.ci <- coefficients(colon.cifit)
+conf.ci <- confint(colon.cifit)
+```
+
+
+In the model above, which is fit using the function `cumincglm`, the model is for the cumulative incidence of death up to 2500 days: 
+\[
+P(T \leq 2500 | \mbox{rx}) = \beta_0 + \beta_1 I(rx = "Lev") + \beta_2 I(rx = "Lev+5FU").
+\] 
+
+
+
+### Exercise {.alert .alert-warning}
+
+What is the interpretation of the coefficients in the model? How do the estimates from the eventglm model compare to the Kaplan-Meier estimate? 
+
+<details>
+<summary><strong>Solution</strong></summary>
+The cumulative incidence of death up to 2500 days in the Observation arm is the intercept `r round(b.ci[1], 2)`. The first coefficient is the expected difference in cumulative incidence of death up to 2500 days comparing the Levamisole alone treatment group to the Observation arm: an estimated `r round(b.ci[2], 2)` difference in the cumulative incidence of death at 2500 days, with 95\% confidence interval `r round(conf.ci[2,], 2)`, while the Levamisole plus 5-FU group has a `r round(b.ci[3], 2)` difference in the cumulative incidence of death at 2500 days, with 95\% confidence interval `r round(conf.ci[3,], 2)`. 
+
+Loosely speaking, the coefficients are risk differences, where the risk refers to the probability of dying within 2500 days. This roughly agrees with the Kaplan-Meier estimates from survfit above: 
+
+```{r}
+cbind(eventglm = b.ci, 
+      survfit = c(1 - colon.sfit$surv[1], 
+  (1 - colon.sfit$surv[2:3]) - 
+    (1 - rep(colon.sfit$surv[1], 2))))
+```
+</details>
+
+
+### Other estimands
+
+#### Survival
+
+Look at the help file for `cumincglm`. There is a long list of options for the function, but one important one is the `survival` argument which is `FALSE` by default. If we set this to `TRUE`:
+
+
+```{r}
+colon.survfit <- cumincglm(Surv(time, status) ~ rx, time = 2500, 
+                           survival = TRUE, data = colon)
+summary(colon.survfit)
+b2.ci <- coefficients(colon.survfit)
+conf2.ci <- confint(colon.survfit)
+```
+
+we get a model for the probability of surviving beyond 2500 days: 
+\[
+P(T > 2500 | \mbox{rx}) = \beta_0 + \beta_1 I(rx = "Lev") + \beta_2 I(rx = "Lev+5FU").
+\] 
+
+
+#### Stop and think {.alert .alert-info}
+
+What is the interpretation of the coefficients in the model? How do they differ from the first model? 
+
+
+#### Link functions
+
+One of the arguments for `cumincglm` is `link`, which is "identity" by default. Other link functions can be used and the interpretation of the coefficients differs depending on the link function. The general generalized linear model in our example is
+\[
+g\{P(T \leq 2500 | \mbox{rx})\} = \beta_0 + \beta_1 I(rx = "Lev") + \beta_2 I(rx = "Lev+5FU")
+\]
+where $g$ is the link function. Let's use $g(x) = \log(x)$ and see what happens. 
+
+```{r}
+colon.logci <- cumincglm(Surv(time, status) ~ rx, time = 2500,
+                           link = "log", data = colon)
+colon.logci
+```
+
+In the above model, the intercept is interpreted as the log cumulative incidence in the observation arm. The coefficient for Lev is
+\[
+\log\{P(T \leq 2500 | \mbox{rx=Lev}\} - \log\{P(T \leq 2500 | \mbox{rx=Obs}\} = 
+\]
+\[
+\log\{\frac{P(T \leq 2500 | \mbox{rx=Lev}}{P(T \leq 2500 | \mbox{rx=Obs}}\}, 
+\]
+the log _relative risk_ or log _risk ratio_. Thus to get the relative risk, an interpretable quantity, we can exponentiate the coefficient estimates and confidence interval limits: 
+
+```{r}
+exp(coef(colon.logci))
+exp(confint(colon.logci))
+```
+
+Other link functions are possible. For example, "logit" is a convenient way to estimate odds and odds ratios, and a "cloglog" link for the cumulative incidence is related to a proportional hazards model. We will return to this in the next section.
+
+
+
+#### Restricted mean
+
+There is another function called `rmeanglm` that fits regression models for the restricted mean. The syntax is very similar: 
+
+```{r}
+colon.rmeanfit <- rmeanglm(Surv(time, status) ~ rx, time = 2500, data = colon)
+colon.rmeanfit
+b.rm <- coefficients(colon.rmeanfit)
+conf.rm <- confint(colon.rmeanfit)
+```
+
+This is a model for the restricted mean up to 2500 days (where $x \wedge y = \min(x, y)$): 
+\[
+E(T \wedge 2500 | \mbox{rx}) = \beta_0 + \beta_1 I(rx = "Lev") + \beta_2 I(rx = "Lev+5FU").
+\] 
+
+We can compare these to the estimates from the Kaplan-Meier fits as before. Here the coefficients are interpreted as restricted mean differences. 
+
+```{r}
+cbind(eventglm = b.rm, 
+      survfit = c(colon.sfit$table[1,5], 
+  colon.sfit$table[2:3,5] - rep(colon.sfit$table[1,5], 2)))
+```
+
+#### Stop and think {.alert .alert-info}
+
+What is the point of having regression models for these quantities that we can easily get from `survfit`?
+
+<details>
+<summary><strong>Solution</strong></summary>
+The regression models are much more flexible. Yes `survfit` can give you estimates in a small number of subgroups, but with `eventglm` it is trivial to do the following things:
+
+- Inference comparing groups on different scales, including the difference, ratio, odds ...
+- Flexible modeling of continuous variables
+- Adjustment for confounding
+- Interaction terms
+- Prediction
+- Modeling of multiple time points
+- Modeling with competing risks and in more general multi-state models
+- Joint modeling of multiple outcomes
+
+As we continue this tutorial we will explore these possibilities and learn more about how these types of models work. 
+
+</details>
+
+
+
+

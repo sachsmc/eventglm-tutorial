@@ -1,0 +1,25 @@
+name: "eventglm Tutorial"
+navbar:
+  title: "Using the `eventglm` R package for regression modeling of censored time-to-event outcomes"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Lessons"
+      icon: fa-book
+      menu:
+        - text: "Lesson 1: Basics"
+          href: basics.html
+        - text: "Lesson 2: Multiple causes and times"
+          href: cmprisk.html
+        - text: "Lesson 3: Censoring models"
+          href: censoring.html
+        - text: "Lesson 4: Multivariate outcome models"
+          href: multivar.html
+        - text: "Lesson 5: Custom pseudo observation modules"
+          href: extending.html
+    - text: "References and resources"
+      href: biblio.html
+output:
+  html_document:
+    code_download: true
+    highlight: textmate

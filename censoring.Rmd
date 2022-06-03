@@ -1,0 +1,177 @@
+---
+title: "Censoring assumptions and models"
+output:
+  html_document:
+    code_folding: show
+bibliography: refs.bib
+---
+
+### Learning objectives {.alert .alert-success}
+
+In this lesson you will 
+
+1. Understand how censoring plays a role in the `eventglm` models
+2. Explore the different options for censoring models
+3. Learn how to construct more flexible models for censoring
+
+
+## Setup
+
+Library the `survival` package and then the `eventglm` package. We will use some commands from `survival` to make sense of what is going on in the regression models.
+
+
+```{r}
+library(survival)
+library(eventglm)
+```
+
+## How does `eventglm` estimate the models?
+
+Our main interest is in estimating the parameters of a generalized linear regression model for $V_i$ conditional on covariates $X_i$: 
+\[
+E(V_i | X_i) = g^{-1}\{X_i^{\top} \beta\},
+\]
+where $V_i = I(T_i < t, \delta_i = d)$ for some specified time $t$, cause $d$, and link function $g$.
+
+We do not observe $T_i$ and $\delta_i$ directly, but rather $Y_i = \min\{C_i, T_i\}$ where $C_i$ is the censoring time, and $\Delta_i \in \{0, 1, \ldots, d\}$ where where 0 indicates censoring occurred before any of the events. The collection of observations will be denoted $Z_1, \ldots, Z_n$ where $Z_i = (Y_i, \Delta_i, X_i)$, and are assumed to be independent and identically distributed.
+
+If there were no censoring before time $t^*$, then the $V_i$ are all observed for $i = 1, \ldots, n$ and the parameters could be estimated using standard methods. When that is not the case, the model can be estimated using pseudo-observations @andersen_generalised_2003. Let $P_i$ denote the pseudo-observation for subject $i$ which will remain abstract for the moment. When the pseudo-observations are computed in a way that 
+\[
+E(P_i | X_i) = E(V_i | X_i) + o_p(1) 
+\]
+in large samples, then estimating $\beta$ by solving the estimating equations
+\[
+\sum_{i = 1}^n \frac{\partial g^{-1}}{\partial \beta} A_i^{-1} \{P_i - g^{-1}(X_i^{\top} \beta)\} = \sum_{i = 1}^n U_i(\beta) =  0
+\]
+yields consistent and asymptotically normal estimates $\hat{\beta}$. 
+
+Let $\theta = E(V_i)$ denote the cumulative summary statistic of interest but marginal with respect to the covariates (i.e., ignoring the covariates) and $\hat{\theta}$ an estimate of that quantity using all of the observations. The estimator is generally nonparametric, e.g., the Aalen-Johansen estimator [@aalen1978empirical] of the cumulative incidence curve, or the Kaplan-Meier estimator [@kaplan1958nonparametric] of the survivor curve, though recently parametric estimators of the marginal quantities have been suggested [@nygaard2020regression, @sabathe2020regression]. 
+
+Let $\hat{\theta}_{-i}$ denote the jackknife estimate obtained by leaving the
+$i$th observation out of the sample and recomputing the estimate. Then
+the $i$th jackknife pseudo-observation is
+\[
+P_i = n \hat{\theta} - (n - 1) \hat{\theta}_{-i}.
+\]
+If censoring is completely independent, then the asymptotic conditional unbiasedness condition holds. 
+
+If we instead assume for some subset of covariates $\tilde{X}_i$ that $(T_i, X_i, \Delta_i) \perp C_i | \tilde{X}_i$ then we can use different approaches to computing the pseudo-observations that will satisfy the asymptotic conditional unbiasedness. When $\tilde{X}_i$ only contains categorical covariates with a finite set of combinations, @andersen_pseudo-observations_2010 suggested computing the jackknife $P_i$ separately for each combination of values in $\tilde{X}_i$. This is implemented in our package and can be obtained using the ` model.censoring = "stratified"` option. 
+
+If $\tilde{X}_i$ contains continuous covariates, then we can model the censoring mechanism conditional on those covariates and use an inverse probability of censoring weighted marginal estimator. Modeling the censoring process conditional on covariates and using inverse probability of censoring weighted estimators was first explored in @binder2014pseudo. This was further developed in @overgaard2019pseudo who showed that asymptotic conditional unbiasedness holds for inverse probability of censoring weighted estimators of the cumulative quantity $E(V_i)$.
+
+## Censoring models
+
+By default, we assume that time to censoring is independent of the time to the event, __and of all covariates in the model__. This is more restrictive than parametric survival models, or Cox regression, which only assumes that censoring time is conditionally independent of event time given the covariates in the model. We provide several options to relax that assumption using the `model.censoring` and `formula.censoring` options. The first is to compute stratified pseudo observations, which assumes that the censoring is independent given a set of categorical covariates: 
+
+```{r}
+
+colon.ci.adj <- cumincglm(Surv(time, status) ~ rx + age + node4, time = 2500, data = colon)
+colon.ci.cen1 <- cumincglm(Surv(time, status) ~ rx + age + node4, time = 2500, 
+                           data = colon, model.censoring = "stratified", 
+                           formula.censoring = ~ rx)
+```
+
+Next, we can assume that the time to censoring follows a Cox model given a set of covariates. By default, the same covariate formula (right hand side) as the main model is used, but any formula can be specified. We can also use Aalens additive hazards model instead of a Cox model for the censoring distribution. Then inverse probability of censoring weighted pseudo observations are used [@overgaard2019pseudo]. According to a simulation study, the stratified option works quite well even when the censoring model is misspecified, and the Aalen additive model tends to work better than the Cox model. 
+
+The `ipcw.method` argument determines the weighting method used, with the default being "binder" and the other option is "hajek". The intercept estimate tends to be off when using "binder" so be aware of that if it is important to you. 
+
+```{r}
+colon.ci.cen2 <- cumincglm(Surv(time, status) ~ rx + age + node4, time = 2500, 
+                           data = colon, model.censoring = "coxph", 
+                           formula.censoring = ~ rx + age + node4)
+colon.ci.cen3 <- cumincglm(Surv(time, status) ~ rx + age + node4, time = 2500, 
+                           data = colon, model.censoring = "aareg", 
+                           formula.censoring = ~ rx + age + node4)
+
+colon.ci.cen2h <- cumincglm(Surv(time, status) ~ rx + age + node4, time = 2500, 
+                           data = colon, model.censoring = "coxph", 
+                           formula.censoring = ~ rx + age + node4, ipcw.method = "hajek")
+colon.ci.cen3h <- cumincglm(Surv(time, status) ~ rx + age + node4, time = 2500, 
+                           data = colon, model.censoring = "aareg", 
+                           formula.censoring = ~ rx + age + node4, ipcw.method = "hajek")
+
+round(cbind("indep" = coef(colon.ci.adj),
+  "strat" = coef(colon.ci.cen1),
+  "coxipcw" = coef(colon.ci.cen2),
+  "aalenipcw" = coef(colon.ci.cen3),
+  "coxipcw.hajek" = coef(colon.ci.cen2h),
+  "aalenipcw.hajek" = coef(colon.ci.cen3h)), 3)
+```
+
+In these models, the IPCW weights are returned in the element called "ipcw.weights". If there are multiple time points, this will be a matrix with one column per time point. 
+
+```{r}
+colon.ci.cen2b <- cumincglm(Surv(time, status) ~ rx + age + node4, 
+                            time = c(500, 1000, 2500), 
+                           data = colon, model.censoring = "coxph", 
+                           formula.censoring = ~ rx + age + node4)
+head(colon.ci.cen2b$ipcw.weights)
+summary(colon.ci.cen2b$ipcw.weights)
+```
+
+
+## Left truncation and delayed entry 
+
+A new feature in `eventglm` (available in version 1.3.0) is a module to fit models that allow for delayed entry/left truncation. This is done by specifying 2 times and an event in the call to `Surv` and using "infjack" for the `model.censoring` argument. Another assumption in this settings is that the entry time is independent of the time to event and all covariates in the model. Currently there are no options to relax that. 
+Let's look at an example using the `myeloid` dataset from the `survival` package. This is a more complex multi-state model, but for now we are only considering a model for the transition from complete response (CR) to death, conditional on having reached complete response. The time from entry to complete response determines the entry time.  
+
+```{r}
+connect <- matrix(0, nrow = 5, ncol = 5, 
+                  dimnames = lapply(1:2, \(i) c("Entry", "Death",
+                                                "CR", "Relapse", "Transplant")))
+connect[1, 2:5] <- 1
+connect[5, 2:5] <- 1
+connect[3, 2:5] <- 1
+connect[4, c(2, 4, 5)] <- 1
+
+statefig(c(2, 3), connect)
+
+mdata <- tmerge(myeloid[!is.na(myeloid$crtime),1:2], myeloid[!is.na(myeloid$crtime),],
+                  id=id, death= event(futime, death),
+                  cr = event(crtime))
+mdata <- mdata[mdata$cr == 0,]
+head(mdata)
+```
+
+Now the model and a comparison using survfit. This approach uses a method called the __infinitesimal jackknife__ to compute the pseudo-observations. 
+
+```{r}
+sfit <- survfit(Surv(tstart, tstop, death) ~ trt, data = mdata)
+
+sfitm <- summary(sfit, times = c(750))
+
+tinf <- cumincglm(Surv(tstart, tstop, death) ~ trt, data = mdata,
+          time = 750, model.censoring = "infjack", survival = TRUE)
+
+
+cbind(eventglm = tinf$coefficients,
+  survfit = c(sfitm$surv[1], diff(sfitm$surv)))
+
+```
+
+Let $T(P)$ denote the functional of interest (e.g., the Aalen-Johansen functional) and $T(\mathbb{P}_n)$ its empirical counterpart, where $\mathbb{P}_n = n^{-1}\sum_{i=1}^n \delta(x_i)$ is the empirical measure based on $n$ iid observations.
+
+The jackknife pseudo-observations can be written 
+
+$$T(\mathbb{P}_n) + (n - 1) (T(\mathbb{P}_n) - T(\mathbb{P}_{ni})) =$$
+$$T(\mathbb{P}_n) + (n - 1) (T(\mathbb{P}_n) - T\left(\frac{n\mathbb{P}_{n} - \delta(x_i)}{n-1}\right))$$
+
+where $\mathbb{P}_{ni}$ is the empirical measure leaving out the $i$th observation.
+
+The influence function of $T$ evaluated at $P$ is $$\phi_P(x) = \partial T(P - \delta(x))$$ is a functional derivative, i.e., an approximation of the original functional. 
+
+$$\phi_P(x) \approx \lim_{\epsilon \rightarrow 0}\frac{T(P) - T(P + \epsilon(\delta(x) - P))}{\epsilon}$$
+
+If we can calculate this, then $\phi_{\mathbb{P}_n}(x_i)$ gives us the perturbation in the estimate infinitesimally close to $x_i$, whereas the ordinary jackknife is $1/n$ units away. See Efron (1982), Chapter 6. 
+
+These are computed already in `survival` for variance estimation, which is what the `pseudo_infjack` uses. These can be computed stratified on a finite set of categorical covariates using the `model.censoring` argument. 
+
+
+
+#### Stop and think {.alert .alert-info}
+
+In your research, what censoring assumptions are plausible/reasonable? How would you model the censoring to operate under those assumptions? 
+
+
+## References
+

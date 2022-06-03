@@ -1,0 +1,14 @@
+---
+title: "References and resources"
+output:
+  html_document:
+    code_folding: show
+bibliography: refs.bib
+---
+
+
+The primary reference for the generalized linear model using pseudo-observations is @andersen_generalised_2003. A more accesible review and summary of the method is @andersen_pseudo-observations_2010. The theoretical properties of the models have been studied by @graw2009pseudo, @jacobsen2016note, and @overgaard2017asymptotic. The methods for dealing with covariate dependent censoring are described in @binder2014pseudo, @overgaard2019pseudo, and @schoenenberger2018modeling. 
+
+Various other extensions and uses of pseudo observations have been proposed (but this list is not comprehensive): relative survival [@pavlivc2019using], causal inference [@andersen2017causal], case-cohort studies [@parner2020cumulative], model checking [@perme2008checking], the illness-death model [@sabathe2020regression], parametric pseudo-observations [@nygaard2020regression], goodness of fit [@pavlivc2019goodness], recurrent events with death as a competing risk [@andersen2019modeling], joint models with recurrent events [@furberg2021bivariate].
+
+## Bibliography
