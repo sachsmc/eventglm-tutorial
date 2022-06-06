@@ -36,8 +36,8 @@ remotes::install_github("sachsmc/eventglm")
 
 ### Download and install the binary for your system [Option 3]
 
-- Windows: [insert link]
-- OSX: [insert link]
+- Windows: https://sachsmc.r-universe.dev/bin/windows/contrib/4.2/eventglm_1.4.0.zip
+- OSX: https://sachsmc.r-universe.dev/bin/macosx/contrib/4.2/eventglm_1.4.0.tgz
 
 
 ### The stable version of the package can be installed from CRAN

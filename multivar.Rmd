@@ -26,7 +26,7 @@ library(geepack)
 
 ## Joint models
 
-Consider again the `mgus2` dataset. This is a competing risks setting, with the two possible causes of failure death and pcm. 
+Consider again the `mgus2` dataset. This is a competing risks setting, with the two possible causes of failure: death and pcm. 
 
 ```{r}
 crfit <- survfit(Surv(etime, event) ~ sex, eventglm::mgus2)
